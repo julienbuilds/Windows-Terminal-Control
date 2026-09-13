@@ -1,4 +1,4 @@
-namespace Wctl.Cli;
+namespace Wctl;
 
 /// <summary>Process exit codes. Scripts can rely on these.</summary>
 public static class ExitCodes

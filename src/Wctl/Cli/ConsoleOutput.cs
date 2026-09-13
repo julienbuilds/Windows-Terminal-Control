@@ -12,6 +12,11 @@ public sealed class ConsoleOutput(IAnsiConsole stdout, IAnsiConsole stderr) : IO
         stdout.MarkupLine($"[grey]{Markup.Escape(label)}:[/] [{ColorFor(text)}]{Markup.Escape(text)}[/]");
     }
 
+    public void Detail(string label, object value)
+    {
+        // Details are for JSON. The terminal line from State already carries the information.
+    }
+
     public void Message(string text) => stdout.MarkupLine(Markup.Escape(text));
 
     public void Table(string key, string[] columns, IReadOnlyList<string[]> rows, TableOptions? options = null)

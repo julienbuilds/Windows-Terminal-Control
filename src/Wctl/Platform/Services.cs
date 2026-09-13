@@ -1,0 +1,18 @@
+using Wctl.Platform.Windows;
+
+namespace Wctl.Platform;
+
+/// <summary>
+/// Everything that touches Windows, behind interfaces. Commands only see the interfaces,
+/// so they can be tested with fakes and the real implementations can be checked by hand.
+/// </summary>
+public sealed class Services
+{
+    public required IAudio Audio { get; init; }
+
+    /// <summary>The real thing. Construction is free; each implementation talks to Windows only when first used.</summary>
+    public static Services Real() => new()
+    {
+        Audio = new CoreAudio(),
+    };
+}

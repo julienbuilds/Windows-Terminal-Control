@@ -1,11 +1,12 @@
 using Spectre.Console;
+using Wctl.Platform;
 
 namespace Wctl.Cli;
 
 /// <summary>Entry point logic, separated from Program.cs so tests can run the whole tool in process.</summary>
 public static class App
 {
-    public static int Run(string[] argv, CommandTable table, IAnsiConsole console, IAnsiConsole errorConsole, TextWriter stdout)
+    public static int Run(string[] argv, CommandTable table, Services services, IAnsiConsole console, IAnsiConsole errorConsole, TextWriter stdout)
     {
         ParsedArgs parsed;
         try
@@ -22,7 +23,7 @@ public static class App
 
         try
         {
-            var code = Router.Dispatch(parsed, table, output, stdout);
+            var code = Router.Dispatch(parsed, table, services, output, stdout);
             output.Flush();
             return code;
         }

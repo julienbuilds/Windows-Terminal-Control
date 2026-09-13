@@ -8,6 +8,8 @@
     <Product>wctl</Product>
     <Description>Fast commands for controlling Windows.</Description>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <!-- Required by source generated COM interop (Platform/Windows). -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
     <!-- One native exe, no runtime to install, fast startup. -->
     <PublishAot>true</PublishAot>

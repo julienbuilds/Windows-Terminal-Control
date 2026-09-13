@@ -1,9 +1,11 @@
+using Wctl.Platform;
+
 namespace Wctl.Cli;
 
 /// <summary>Picks the command for a parsed command line and runs it.</summary>
 public static class Router
 {
-    public static int Dispatch(ParsedArgs parsed, CommandTable table, IOutput output, TextWriter stdout)
+    public static int Dispatch(ParsedArgs parsed, CommandTable table, Services services, IOutput output, TextWriter stdout)
     {
         if (parsed.Version)
         {
@@ -33,6 +35,11 @@ public static class Router
             return Help.Command(command, output);
         }
 
-        return command.Run(new Invocation(rest, parsed, output, stdout, table));
+        if (rest.Count > command.MaxArgs)
+        {
+            throw new WctlException($"Too many arguments for '{command.Name}'. Usage: w {command.Usage}");
+        }
+
+        return command.Run(new Invocation(rest, parsed, output, stdout, table, services));
     }
 }

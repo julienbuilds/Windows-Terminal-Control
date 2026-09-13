@@ -20,6 +20,19 @@ public class JsonOutputTests
     }
 
     [Fact]
+    public void Details_AreIncluded()
+    {
+        using var writer = new StringWriter();
+        var output = new JsonOutput(writer);
+
+        output.State("Volume", 47, "47% (muted)");
+        output.Detail("Muted", true);
+        output.Flush();
+
+        Assert.Equal("{\"volume\":47,\"muted\":true}", writer.ToString().Trim());
+    }
+
+    [Fact]
     public void Tables_BecomeArraysWithACurrentFlag()
     {
         using var writer = new StringWriter();

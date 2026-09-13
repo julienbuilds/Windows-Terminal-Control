@@ -1,4 +1,4 @@
-namespace Wctl.Cli;
+namespace Wctl;
 
 /// <summary>
 /// An error with a message meant for the user. The message is printed as is and the process exits with <see cref="ExitCode"/>.

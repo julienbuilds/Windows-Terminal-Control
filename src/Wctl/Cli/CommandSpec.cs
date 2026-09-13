@@ -24,6 +24,9 @@ public sealed record CommandSpec
     /// <summary>Optional longer text shown by "w help &lt;command&gt;".</summary>
     public string? Details { get; init; }
 
+    /// <summary>How many words the command accepts after its name. More than that is an error, so typos never pass silently.</summary>
+    public int MaxArgs { get; init; } = int.MaxValue;
+
     public required Func<Invocation, int> Run { get; init; }
 }
 

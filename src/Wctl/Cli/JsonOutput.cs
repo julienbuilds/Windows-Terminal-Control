@@ -12,6 +12,8 @@ public sealed class JsonOutput(TextWriter stdout) : IOutput
 
     public void State(string label, object value, string? display = null) => facts.Add(new(ToKey(label), value));
 
+    public void Detail(string label, object value) => facts.Add(new(ToKey(label), value));
+
     public void Message(string text)
     {
         // Text for people has no place in machine readable output.

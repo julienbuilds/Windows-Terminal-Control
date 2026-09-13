@@ -11,6 +11,7 @@ public static class HelpCommand
         Summary = "Show all commands, or details for one",
         Usage = "help [<command>]",
         Details = "'w help --markdown' prints the command list as Markdown. scripts/update-commands.ps1 uses it to generate COMMANDS.md.",
+        MaxArgs = 1,
         Run = Run,
     };
 
