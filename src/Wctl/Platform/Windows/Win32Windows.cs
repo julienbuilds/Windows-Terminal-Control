@@ -27,17 +27,21 @@ public sealed unsafe class Win32Windows : IWindows
             var processId = ProcessIdOf(hwnd);
             var monitor = User32.MonitorFromWindow(hwnd, User32.MonitorDefaultToNearest);
             var monitorIndex = monitors.Find(m => m.Handle == monitor).Info?.Index ?? 0;
+            var image = ProcessImage(processId);
 
             windows.Add(new WindowInfo(
                 hwnd,
                 WindowText(hwnd),
-                ProcessName(processId),
+                image is null ? "?" : Path.GetFileNameWithoutExtension(image),
                 processId,
                 monitorIndex,
                 User32.IsIconic(hwnd),
                 User32.IsZoomed(hwnd),
                 (ExStyle(hwnd) & User32.WsExTopMost) != 0,
-                hwnd == foreground));
+                hwnd == foreground)
+            {
+                ExecutablePath = image ?? string.Empty,
+            });
         }
 
         return windows;
@@ -317,12 +321,13 @@ public sealed unsafe class Win32Windows : IWindows
         return processId;
     }
 
-    private static string ProcessName(uint processId)
+    /// <returns>The full exe path, or null for processes Windows keeps private.</returns>
+    private static string? ProcessImage(uint processId)
     {
         var handle = Kernel32.OpenProcess(Kernel32.ProcessQueryLimitedInformation, false, processId);
         if (handle == 0)
         {
-            return "?";
+            return null;
         }
 
         try
@@ -333,11 +338,11 @@ public sealed unsafe class Win32Windows : IWindows
             {
                 if (!Kernel32.QueryFullProcessImageNameW(handle, 0, p, ref size))
                 {
-                    return "?";
+                    return null;
                 }
             }
 
-            return Path.GetFileNameWithoutExtension(new string(buffer, 0, (int)size));
+            return new string(buffer, 0, (int)size);
         }
         finally
         {

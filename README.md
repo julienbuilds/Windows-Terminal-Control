@@ -35,7 +35,8 @@ w help move
 | Windows | `ls`, `move`, `center`, `max`, `min`, `top`, `monitors` |
 | Audio | `vol`, `mute`, `mic`, `audio` |
 | Display | `hdr`, `brightness` |
-| System | `lock`, `sleep`, `awake` |
+| System | `lock`, `sleep`, `awake`, `wait` |
+| Scenes | `scene` |
 
 Rules that apply everywhere:
 
@@ -44,6 +45,25 @@ Rules that apply everywhere:
 - Windows are picked by their number from `w ls`, by app name, or by part of the title: `w move 2 left`, `w close spotify`, `w focus youtube`.
 - Add `--json` to any command to get machine readable output for scripts.
 - Exit code 0 means done, 1 means the command could not do what you asked, 2 means an unexpected error. Run again with `--debug` for details.
+
+## Scenes
+
+A scene is a saved list of commands. `w scene new work` captures your current setup (volume, mic, audio output, HDR, brightness, open apps and where their windows are) into steps you can review, trim and save. After that, `w work` replays it.
+
+```
+[work]
+vol 15
+audio "Speakers (Focusrite USB Audio)"
+hdr off
+open firefox
+open Code
+wait 2s
+move firefox 0 0 1536 1680
+move Code 2
+max Code
+```
+
+All scenes live in one text file, one command per line. `w scene file` opens it, `w scene edit work` reopens the review. A step that fails does not stop the rest; every step shows a check or a cross.
 
 ## Good to know
 
@@ -67,7 +87,7 @@ After adding or changing a command, run `scripts/update-commands.ps1` to regener
 
 ## Coming next
 
-Scenes (`w scene work` runs a list of commands), a scene editor in the terminal, night light, undo.
+Tab completion for PowerShell, undo, night light, per app volume.
 
 ## License
 

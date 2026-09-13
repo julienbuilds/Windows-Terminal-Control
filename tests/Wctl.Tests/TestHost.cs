@@ -27,6 +27,8 @@ internal sealed class Fakes
 
     public FakeSceneStore Scenes { get; } = new();
 
+    public FakePrompt Prompt { get; } = new();
+
     public Services Services => new()
     {
         Audio = Audio,
@@ -36,6 +38,7 @@ internal sealed class Fakes
         Power = Power,
         Clock = Clock,
         Scenes = Scenes,
+        Prompt = Prompt,
     };
 }
 

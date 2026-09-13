@@ -20,7 +20,10 @@ internal sealed class FakeWindows : IWindows
     [
         new(Firefox, "ChatGPT - Mozilla Firefox", "firefox", 100, 1, Minimized: false, Maximized: false, TopMost: false, Active: true),
         new(Discord, "Discord", "Discord", 200, 2, Minimized: false, Maximized: true, TopMost: false, Active: false),
-        new(Terminal, "PowerShell", "WindowsTerminal", 300, 1, Minimized: false, Maximized: false, TopMost: true, Active: false),
+        new(Terminal, "PowerShell", "WindowsTerminal", 300, 1, Minimized: false, Maximized: false, TopMost: true, Active: false)
+        {
+            ExecutablePath = @"C:\Program Files\WindowsApps\Microsoft.WindowsTerminal_1.21.2911.0_x64__8wekyb3d8bbwe\WindowsTerminal.exe",
+        },
         new(Spotify, "Spotify Premium", "Spotify", 400, 1, Minimized: true, Maximized: false, TopMost: false, Active: false),
         new(FirefoxSecond, "Discord invite - Mozilla Firefox", "firefox", 100, 2, Minimized: false, Maximized: false, TopMost: false, Active: false),
     ];

@@ -54,7 +54,11 @@ public sealed record WindowInfo(
     bool Minimized,
     bool Maximized,
     bool TopMost,
-    bool Active);
+    bool Active)
+{
+    /// <summary>Full path of the process exe, or empty when Windows would not say. Store apps live under WindowsApps.</summary>
+    public string ExecutablePath { get; init; } = string.Empty;
+}
 
 /// <param name="Index">1 based number, as Windows shows it in display settings.</param>
 /// <param name="Device">Device name, for example \\.\DISPLAY1.</param>

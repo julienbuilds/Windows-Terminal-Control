@@ -22,6 +22,8 @@ public sealed class Services
 
     public required ISceneStore Scenes { get; init; }
 
+    public required IPrompt Prompt { get; init; }
+
     /// <summary>The real thing. Construction is free; each implementation talks to Windows only when first used.</summary>
     public static Services Real() => new()
     {
@@ -32,5 +34,6 @@ public sealed class Services
         Power = new WindowsPower(),
         Clock = new SystemClock(),
         Scenes = new FileSceneStore(),
+        Prompt = new ConsolePrompt(),
     };
 }

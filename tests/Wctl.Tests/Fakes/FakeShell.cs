@@ -7,6 +7,7 @@ internal sealed class FakeShell : IShell
     public const string SpotifyId = @"shell:AppsFolder\SpotifyAB.SpotifyMusic_zpdnekdrzrea0!Spotify";
     public const string CodeId = @"shell:AppsFolder\{6D809377-6AF0-444B-8957-A3773F02200E}\Microsoft VS Code\Code.exe";
     public const string NotepadId = @"shell:AppsFolder\Microsoft.WindowsNotepad_8wekyb3d8bbwe!App";
+    public const string TerminalId = @"shell:AppsFolder\Microsoft.WindowsTerminal_8wekyb3d8bbwe!App";
 
     public string CurrentDirectory { get; set; } = @"C:\Users\Julien\CursorProjects";
 
@@ -35,6 +36,7 @@ internal sealed class FakeShell : IShell
         new("Firefox", @"shell:AppsFolder\{GUID}\Mozilla Firefox\firefox.exe", "firefox"),
         new("Notepad", NotepadId, string.Empty),
         new("Steam", @"shell:AppsFolder\{GUID}\Steam\steam.exe", "steam"),
+        new("Terminal", TerminalId, string.Empty),
     ];
 
     public List<(string Target, string? Arguments)> Opened { get; } = [];

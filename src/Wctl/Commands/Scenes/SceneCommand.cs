@@ -12,12 +12,13 @@ public static class SceneCommand
         Name = "scene",
         Aliases = ["s", "scenes"],
         Group = Groups.Scenes,
-        Summary = "Run a scene: a saved list of commands",
-        Usage = "scene <name> | list | show <name> | delete <name> | file",
+        Summary = "Run, create or edit a scene: a saved list of commands",
+        Usage = "scene <name> | list | show <name> | new <name> [empty] | edit <name> | delete <name> | file",
         Details = "A scene runs its steps in order and reports each one; a failing step does not stop the rest. "
-            + "'w work' also runs the scene named work. Scenes live in one text file, one command per line under a [name] header; "
-            + "'w scene file' opens it. Put 'wait 2s' between opening an app and moving its window.",
-        MaxArgs = 2,
+            + "'w work' also runs the scene named work. 'w scene new work' captures your current setup (sound, displays, "
+            + "open apps and their windows) into steps you can review, trim and save; add 'empty' to start blank. "
+            + "Scenes live in one text file, one command per line under a [name] header; 'w scene file' opens it.",
+        MaxArgs = 3,
         Run = Run,
     };
 
@@ -31,6 +32,13 @@ public static class SceneCommand
 
             case "show":
                 return Show(Find(Load(store), Name(inv)), inv.Output);
+
+            case "new":
+                return New(inv, Name(inv));
+
+            case "edit":
+                var scene = Find(Load(store), Name(inv));
+                return new SceneEditor(inv).Run(scene.Name, scene.Steps.ToList());
 
             case "delete":
                 return Delete(store, Name(inv), inv.Output);
@@ -56,6 +64,36 @@ public static class SceneCommand
 
     private static string Name(Invocation inv)
         => inv.Args.Count > 1 ? inv.Args[1] : throw new WctlException($"Which scene? Usage: w {Spec.Usage}");
+
+    private static int New(Invocation inv, string name)
+    {
+        SceneFile.ValidateName(name);
+        if (inv.Table.Find(name) is not null)
+        {
+            throw new WctlException($"'{name}' is a command name. Pick another name for the scene.");
+        }
+
+        if (Load(inv.Services.Scenes).Exists(s => s.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+        {
+            throw new WctlException($"A scene named '{name}' exists. Use 'w scene edit {name}' or 'w scene delete {name}'.");
+        }
+
+        var empty = inv.Args.Count > 2 && inv.Args[2].Equals("empty", StringComparison.OrdinalIgnoreCase);
+        if (inv.Args.Count > 2 && !empty)
+        {
+            throw new WctlException($"Expected 'empty' or nothing after the name. Got '{inv.Args[2]}'. Usage: w {Spec.Usage}");
+        }
+
+        var app = inv.Services.Shell.InstalledApps().FirstOrDefault(a =>
+            a.Name.Equals(name, StringComparison.OrdinalIgnoreCase) || a.Executable.Equals(name, StringComparison.OrdinalIgnoreCase));
+        if (app is not null)
+        {
+            inv.Output.Message($"Note: '{name}' is also the app {app.Name}. 'w {name}' will run the scene; 'w open {name}' still opens the app.");
+        }
+
+        var steps = empty ? [] : SceneCapture.Capture(inv.Services);
+        return new SceneEditor(inv).Run(name, steps);
+    }
 
     private static int List(List<Scene> scenes, IOutput output)
     {
