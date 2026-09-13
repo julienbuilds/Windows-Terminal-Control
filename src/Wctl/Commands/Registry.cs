@@ -4,6 +4,7 @@ using Wctl.Commands.Audio;
 using Wctl.Commands.Display;
 using Wctl.Commands.Files;
 using Wctl.Commands.Power;
+using Wctl.Commands.Scenes;
 using Wctl.Commands.Windows;
 
 namespace Wctl.Commands;
@@ -36,6 +37,8 @@ public static class Registry
         LockCommand.Spec,
         SleepCommand.Spec,
         AwakeCommand.Spec,
+        WaitCommand.Spec,
+        SceneCommand.Spec,
         HelpCommand.Spec,
         VersionCommand.Spec,
     ]);

@@ -20,7 +20,7 @@ internal sealed record WindowMatch(IReadOnlyList<WindowInfo> Windows, bool ByApp
 internal static class WindowTarget
 {
     public static WindowMatch Resolve(IReadOnlyList<WindowInfo> windows, string query)
-        => Find(windows, query) ?? throw new WctlException($"No window matches '{query}'. Run 'w ls' to see open windows.");
+        => Find(windows, query) ?? throw new WindowNotFoundException($"No window matches '{query}'. Run 'w ls' to see open windows.");
 
     /// <returns>Null when nothing matches. Throws for a bad number or an ambiguous query.</returns>
     public static WindowMatch? Find(IReadOnlyList<WindowInfo> windows, string query)

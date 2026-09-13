@@ -46,6 +46,21 @@ public class ConsoleOutputTests
     }
 
     [Fact]
+    public void Step_PrintsMarkStepAndResult()
+    {
+        var (output, stdout, _) = Create();
+
+        output.StepResult("vol 15", true, "Volume: 15%");
+        output.StepResult("close blender", false, "No window matches 'blender'.");
+
+        var lines = TestHost.Normalize(stdout.Output).Split('\n');
+        Assert.StartsWith("  ✓ vol 15", lines[0], StringComparison.Ordinal);
+        Assert.EndsWith("Volume: 15%", lines[0], StringComparison.Ordinal);
+        Assert.StartsWith("  ✗ close blender", lines[1], StringComparison.Ordinal);
+        Assert.EndsWith("No window matches 'blender'.", lines[1], StringComparison.Ordinal);
+    }
+
+    [Fact]
     public void Action_PrintsTargetAndResult()
     {
         var (output, stdout, _) = Create();

@@ -96,7 +96,7 @@ public class WindowTargetTests
     [Fact]
     public void NoMatch_Fails()
     {
-        var e = Assert.Throws<WctlException>(() => WindowTarget.Resolve(windows.WindowList, "blender"));
+        var e = Assert.Throws<WindowNotFoundException>(() => WindowTarget.Resolve(windows.WindowList, "blender"));
 
         Assert.Contains("No window matches 'blender'", e.Message);
     }
