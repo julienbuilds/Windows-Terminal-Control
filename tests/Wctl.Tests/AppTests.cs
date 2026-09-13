@@ -83,7 +83,7 @@ public class AppTests
     {
         var table = TestHost.TableWith(Throwing(new InvalidOperationException("boom")));
 
-        Assert.Throws<InvalidOperationException>(() => TestHost.Run(table, "boom", "--debug"));
+        Assert.Throws<InvalidOperationException>(() => TestHost.Run(table, new Fakes().Services, "boom", "--debug"));
     }
 
     [Fact]

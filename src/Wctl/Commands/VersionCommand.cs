@@ -10,6 +10,7 @@ public static class VersionCommand
         Group = Groups.Help,
         Summary = "Show the wctl version",
         Usage = "version",
+        MaxArgs = 0,
         Run = inv =>
         {
             inv.Output.State("wctl", VersionInfo.Current);

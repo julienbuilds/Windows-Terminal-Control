@@ -7,6 +7,15 @@ Every command has a long form and short aliases. On/off settings toggle when giv
 Add `--json` to any command for machine readable output.
 Exit codes: 0 done, 1 the command could not do what was asked, 2 unexpected error (run again with `--debug`).
 
+## Audio
+
+| Command | Aliases | Description |
+|---|---|---|
+| `w vol [<n> \| +<n> \| -<n> \| mute \| unmute]` | `volume`, `v` | Show or set the speaker volume |
+| `w mute [on \| off]` |  | Mute or unmute the speakers |
+| `w mic [mute \| unmute]` |  | Mute or unmute the microphone |
+| `w audio [<device>]` | `a` | List audio outputs, or switch to one |
+
 ## Help
 
 | Command | Aliases | Description |

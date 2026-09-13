@@ -18,6 +18,17 @@ public class ConsoleOutputTests
     }
 
     [Fact]
+    public void Details_AreNotShown()
+    {
+        var (output, stdout, _) = Create();
+
+        output.State("Volume", 47, "47% (muted)");
+        output.Detail("Muted", true);
+
+        Assert.Equal("Volume: 47% (muted)\n", TestHost.Normalize(stdout.Output));
+    }
+
+    [Fact]
     public void Table_MarksTheCurrentRow()
     {
         var (output, stdout, _) = Create();
