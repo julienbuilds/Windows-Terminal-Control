@@ -49,7 +49,7 @@ Exit codes: 0 done, 1 the command could not do what was asked, 2 unexpected erro
 
 | Command | Aliases | Description |
 |---|---|---|
-| `w hdr [on \| off \| status]` | `h` | Turn HDR on or off |
+| `w hdr [on \| off \| status] [monitor <m>]` | `h` | Turn HDR on or off |
 | `w brightness [<n> \| +<n> \| -<n>] [monitor <m>]` | `bright` | Show or set monitor brightness |
 
 ## System

@@ -11,44 +11,72 @@ public static class HdrCommand
         Aliases = ["h"],
         Group = Groups.Display,
         Summary = "Turn HDR on or off",
-        Usage = "hdr [on | off | status]",
-        Details = "Without an argument it toggles. Acts on every display that supports HDR. "
-            + "When displays disagree, the toggle turns all of them on first. 'w hdr status' only shows the state.",
-        MaxArgs = 1,
+        Usage = "hdr [on | off | status] [monitor <m>]",
+        Details = "Without an argument it toggles. Acts on every display that supports HDR unless 'monitor <m>' picks one: "
+            + "a number from 'w monitors', or 'main' for the primary monitor. When displays disagree, the toggle turns all of "
+            + "them on first. 'w hdr status' only shows the state.",
+        MaxArgs = 3,
         Run = Run,
     };
 
     private static int Run(Invocation inv)
     {
+        var monitors = inv.Services.Windows.Monitors();
+        var words = inv.Args.ToList();
+        var monitor = MonitorNames.Take(words, monitors, Spec.Usage);
+        if (words.Count > 1)
+        {
+            throw new WctlException($"Too many arguments. Usage: w {Spec.Usage}");
+        }
+
+        var word = words.Count == 1 ? words[0].ToLowerInvariant() : null;
         var display = inv.Services.Display;
-        var all = display.GetHdr();
+        var selected = Select(display.GetHdr(), monitor);
+
+        bool? target = word switch
+        {
+            null => !selected.All(d => d.Enabled),
+            "on" => true,
+            "off" => false,
+            "status" => null,
+            _ => throw new WctlException($"Expected on, off, status or nothing. Got '{words[0]}'."),
+        };
+
+        if (target is bool wanted)
+        {
+            foreach (var d in selected.Where(d => d.Enabled != wanted))
+            {
+                display.SetHdr(d.Device, wanted);
+            }
+
+            var devices = selected.Select(d => d.Device).ToHashSet();
+            selected = display.GetHdr().Where(d => devices.Contains(d.Device)).ToList();
+        }
+
+        Report(selected, monitors, inv.Output);
+        return ExitCodes.Ok;
+    }
+
+    private static List<HdrDisplay> Select(IReadOnlyList<HdrDisplay> all, MonitorInfo? monitor)
+    {
+        if (monitor is not null)
+        {
+            var match = all.FirstOrDefault(d => d.Device == monitor.Device);
+            if (match is null || !match.Supported)
+            {
+                throw new WctlException($"Monitor {monitor.Index} does not support HDR.");
+            }
+
+            return [match];
+        }
+
         var capable = all.Where(d => d.Supported).ToList();
         if (capable.Count == 0)
         {
             throw new WctlException("No display supports HDR.");
         }
 
-        bool? target = inv.FirstArg switch
-        {
-            null => !capable.All(d => d.Enabled),
-            "on" => true,
-            "off" => false,
-            "status" => null,
-            _ => throw new WctlException($"Expected on, off, status or nothing. Got '{inv.Args[0]}'."),
-        };
-
-        if (target is bool wanted)
-        {
-            foreach (var d in capable.Where(d => d.Enabled != wanted))
-            {
-                display.SetHdr(d.Device, wanted);
-            }
-
-            capable = display.GetHdr().Where(d => d.Supported).ToList();
-        }
-
-        Report(capable, inv.Services.Windows.Monitors(), inv.Output);
-        return ExitCodes.Ok;
+        return capable;
     }
 
     private static void Report(List<HdrDisplay> displays, IReadOnlyList<MonitorInfo> monitors, IOutput output)
