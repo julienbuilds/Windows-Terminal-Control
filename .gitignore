@@ -1,0 +1,26 @@
+# Build output
+bin/
+obj/
+publish/
+artifacts/
+TestResults/
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.swp
+*.DotSettings.user
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Project: agent notes and planning material stay local
+agent/
+conversation.txt
+guideline.txt
+CLAUDE.md
+.claude/

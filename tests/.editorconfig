@@ -1,0 +1,5 @@
+[*.cs]
+# Test names use underscores: Thing_DoesWhat
+dotnet_diagnostic.CA1707.severity = none
+# Inline arrays in test calls are fine
+dotnet_diagnostic.CA1861.severity = none
