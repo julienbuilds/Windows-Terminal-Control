@@ -19,6 +19,14 @@ Keyboard shortcuts without having to memorize keyboard shortcuts.
 Download `w.exe` from the [latest release](../../releases/latest) and put it in a folder that is on your `PATH`.
 One file, no runtime to install. Windows 10 or 11, 64 bit.
 
+For tab completion, add it to your PowerShell profile once:
+
+```
+w completion powershell >> $PROFILE
+```
+
+Then in a new terminal, Tab completes commands, scenes, installed apps, open windows, audio devices and monitors.
+
 ## Commands
 
 Every command is listed in [COMMANDS.md](COMMANDS.md). The same list lives in the terminal:
@@ -37,6 +45,7 @@ w help move
 | Display | `hdr`, `brightness` |
 | System | `lock`, `sleep`, `awake`, `wait` |
 | Scenes | `scene` |
+| Help | `help`, `version`, `completion` |
 
 Rules that apply everywhere:
 
@@ -71,6 +80,7 @@ All scenes live in one text file, one command per line. `w scene file` opens it,
 - `w hdr` acts on every display that supports HDR. `w hdr monitor main` only touches the primary monitor, `w hdr monitor 2` the one with that number in `w monitors`.
 - `w brightness` talks to the monitor over DDC/CI. Some monitors need that switched on in their menu, and some drop a request now and then. The command retries and tells you when a monitor did not follow. `w brightness 50 monitor 2` sets one monitor.
 - `w awake` blocks the terminal and shows a countdown. Ctrl+C ends it early.
+- The list of installed apps is kept for a day so `w spotify` stays instant. An app installed since then is still found, because a lookup that comes up empty rebuilds the list. `w apps --refresh` rebuilds it now.
 
 ## Build from source
 
@@ -87,7 +97,7 @@ After adding or changing a command, run `scripts/update-commands.ps1` to regener
 
 ## Coming next
 
-Tab completion for PowerShell, undo, night light, per app volume.
+Undo, night light, per app volume, `w restart <app>`.
 
 ## License
 

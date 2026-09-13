@@ -12,6 +12,7 @@ public static class MuteCommand
         Usage = "mute [on | off]",
         Details = "Without an argument it toggles. 'w mute status' only shows the state.",
         MaxArgs = 1,
+        Complete = _ => ["on", "off", "status"],
         Run = Run,
     };
 

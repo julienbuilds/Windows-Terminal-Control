@@ -4,20 +4,30 @@ namespace Wctl.Commands.Apps;
 
 public static class AppsCommand
 {
+    private const string RefreshWord = "--refresh";
+
     public static readonly CommandSpec Spec = new()
     {
         Name = "apps",
         Group = Groups.Apps,
         Summary = "List installed apps, optionally filtered",
-        Usage = "apps [<filter>]",
-        Details = "Shows the names 'w open' understands. The exe column is the short name for desktop apps: 'w open code'.",
+        Usage = "apps [<filter>] [--refresh]",
+        Details = "Shows the names 'w open' understands. The exe column is the short name for desktop apps: 'w open code'. "
+            + "The list is kept for a day so opening an app stays instant; '--refresh' rebuilds it now. "
+            + "An app that was just installed is also found on the next lookup, which refreshes by itself.",
+        Complete = _ => [RefreshWord],
         Run = Run,
     };
 
     private static int Run(Invocation inv)
     {
-        var filter = string.Join(' ', inv.Args);
-        var apps = inv.Services.Shell.InstalledApps()
+        var words = inv.Args.ToList();
+        var refresh = words.RemoveAll(w => w.Equals(RefreshWord, StringComparison.OrdinalIgnoreCase)) > 0;
+        var catalog = inv.AppCatalog;
+        var all = refresh ? catalog.Refresh() : catalog.Apps;
+
+        var filter = string.Join(' ', words);
+        var apps = all
             .Where(a => filter.Length == 0
                 || a.Name.Contains(filter, StringComparison.OrdinalIgnoreCase)
                 || a.Executable.Contains(filter, StringComparison.OrdinalIgnoreCase))

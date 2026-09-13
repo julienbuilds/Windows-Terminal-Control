@@ -15,6 +15,7 @@ public static class OpenCommand
         Details = "'w spotify' is short for 'w open spotify'. Apps are matched by name like in the Start menu, so 'w open code' "
             + "and 'w open visual studio code' both work. Extra words go to the app: 'w open code .'. "
             + "Files and links open with their default app. 'w open settings' opens Windows Settings.",
+        Complete = ctx => ctx.Position == 0 ? ctx.AppNames() : [],
         Run = Run,
     };
 
@@ -56,7 +57,7 @@ public static class OpenCommand
             return ExitCodes.Ok;
         }
 
-        var app = AppMatcher.Find(shell.InstalledApps(), thing)
+        var app = inv.AppCatalog.Find(thing)
             ?? throw new WctlException($"Nothing called '{thing}' was found: not an installed app, file, folder or link. Run 'w apps {thing}' to search installed apps.");
 
         var arguments = inv.Args.Count > 1 ? Quote(inv.Args.Skip(1)) : null;

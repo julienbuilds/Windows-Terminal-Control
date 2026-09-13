@@ -13,6 +13,7 @@ public static class KillCommand
         Usage = "kill <app>",
         Details = "Terminates the process without asking. Unsaved work is lost. Also works for apps without a window, by process name.",
         MaxArgs = 1,
+        Complete = ctx => ctx.Position == 0 ? ctx.WindowTargets() : [],
         Run = Run,
     };
 

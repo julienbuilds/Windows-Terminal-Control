@@ -15,7 +15,7 @@ Exit codes: 0 done, 1 the command could not do what was asked, 2 unexpected erro
 | `w focus <window>` | `f` | Bring an app's window to the front |
 | `w close <window>` | `x` | Close an app, like clicking its X |
 | `w kill <app>` |  | Force an app to quit |
-| `w apps [<filter>]` |  | List installed apps, optionally filtered |
+| `w apps [<filter>] [--refresh]` |  | List installed apps, optionally filtered |
 
 ## Files
 
@@ -73,3 +73,5 @@ Exit codes: 0 done, 1 the command could not do what was asked, 2 unexpected erro
 |---|---|---|
 | `w help [<command>]` |  | Show all commands, or details for one |
 | `w version` |  | Show the wctl version |
+| `w completion powershell` |  | Print the tab completion script for your shell |
+| `w complete <word> ... [--end]` |  | Print completion candidates for a half typed command line |

@@ -20,7 +20,9 @@ public sealed class Services
 
     public required IClock Clock { get; init; }
 
-    public required ISceneStore Scenes { get; init; }
+    public required ITextStore Scenes { get; init; }
+
+    public required ITextStore AppCache { get; init; }
 
     public required IPrompt Prompt { get; init; }
 
@@ -33,7 +35,8 @@ public sealed class Services
         Display = new WindowsDisplay(),
         Power = new WindowsPower(),
         Clock = new SystemClock(),
-        Scenes = new FileSceneStore(),
+        Scenes = FileTextStore.Scenes(),
+        AppCache = FileTextStore.AppCache(),
         Prompt = new ConsolePrompt(),
     };
 }

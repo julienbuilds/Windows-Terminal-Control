@@ -17,6 +17,7 @@ public static class BrightnessCommand
             + "Acts on every monitor that answers unless 'monitor <m>' picks one: a number from 'w monitors', or 'main' for "
             + "the primary monitor. Laptop panels are not covered yet.",
         MaxArgs = 3,
+        Complete = ctx => ctx.WithMonitorOption("status"),
         Run = Run,
     };
 

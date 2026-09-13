@@ -15,6 +15,7 @@ public static class CloseCommand
         Details = "An app name closes all its windows. A title or a number from 'w ls' closes that one window. "
             + "The app may still ask to save. Use 'w kill' to force it.",
         MaxArgs = 1,
+        Complete = ctx => ctx.Position == 0 ? ctx.WindowTargets() : [],
         Run = Run,
     };
 

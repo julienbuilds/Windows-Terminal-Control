@@ -15,6 +15,7 @@ public static class AudioCommand
         Usage = "audio [<device>]",
         Details = "Pick a device by its number in the list or by part of its name: 'w audio fiio'. "
             + "The device becomes the default for media, system sounds and calls.",
+        Complete = ctx => ctx.Position == 0 ? ctx.AudioDevices() : [],
         Run = Run,
     };
 
