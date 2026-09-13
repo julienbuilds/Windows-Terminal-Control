@@ -1,6 +1,7 @@
 using Wctl.Cli;
 using Wctl.Commands.Apps;
 using Wctl.Commands.Audio;
+using Wctl.Commands.Display;
 using Wctl.Commands.Files;
 using Wctl.Commands.Windows;
 
@@ -29,6 +30,8 @@ public static class Registry
         MuteCommand.Spec,
         MicCommand.Spec,
         AudioCommand.Spec,
+        HdrCommand.Spec,
+        BrightnessCommand.Spec,
         HelpCommand.Spec,
         VersionCommand.Spec,
     ]);
