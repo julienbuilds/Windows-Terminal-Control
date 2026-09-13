@@ -14,6 +14,12 @@ public sealed class JsonOutput(TextWriter stdout) : IOutput
 
     public void Detail(string label, object value) => facts.Add(new(ToKey(label), value));
 
+    public void Action(string target, string result)
+    {
+        facts.Add(new("target", target));
+        facts.Add(new("result", result));
+    }
+
     public void Message(string text)
     {
         // Text for people has no place in machine readable output.

@@ -15,6 +15,9 @@ public interface IOutput
     /// <summary>A fact for scripts only. Included in JSON output, not shown in the terminal, because the terminal line already says it.</summary>
     void Detail(string label, object value);
 
+    /// <summary>Something was done to a target. Terminal: "firefox: left half of monitor 1". JSON: "target" and "result" properties.</summary>
+    void Action(string target, string result);
+
     /// <summary>A plain line of text for people. Not included in JSON output.</summary>
     void Message(string text);
 

@@ -29,6 +29,26 @@ public class ConsoleOutputTests
     }
 
     [Fact]
+    public void Action_PrintsTargetAndResult()
+    {
+        var (output, stdout, _) = Create();
+
+        output.Action("firefox", "left half of monitor 1");
+
+        Assert.Equal("firefox: left half of monitor 1\n", TestHost.Normalize(stdout.Output));
+    }
+
+    [Fact]
+    public void Table_WithoutRows_PrintsNothing()
+    {
+        var (output, stdout, _) = Create();
+
+        output.Table("windows", ["index"], []);
+
+        Assert.Equal(string.Empty, stdout.Output);
+    }
+
+    [Fact]
     public void Table_MarksTheCurrentRow()
     {
         var (output, stdout, _) = Create();

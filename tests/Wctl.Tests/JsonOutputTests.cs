@@ -33,6 +33,18 @@ public class JsonOutputTests
     }
 
     [Fact]
+    public void Actions_HaveTargetAndResult()
+    {
+        using var writer = new StringWriter();
+        var output = new JsonOutput(writer);
+
+        output.Action("firefox", "focused");
+        output.Flush();
+
+        Assert.Equal("{\"target\":\"firefox\",\"result\":\"focused\"}", writer.ToString().Trim());
+    }
+
+    [Fact]
     public void Tables_BecomeArraysWithACurrentFlag()
     {
         using var writer = new StringWriter();
