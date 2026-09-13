@@ -17,10 +17,19 @@ public sealed class ConsoleOutput(IAnsiConsole stdout, IAnsiConsole stderr) : IO
         // Details are for JSON. The terminal line from State already carries the information.
     }
 
+    public void Action(string target, string result)
+        => stdout.MarkupLine($"[bold]{Markup.Escape(target)}:[/] {Markup.Escape(result)}");
+
     public void Message(string text) => stdout.MarkupLine(Markup.Escape(text));
 
     public void Table(string key, string[] columns, IReadOnlyList<string[]> rows, TableOptions? options = null)
     {
+        if (rows.Count == 0)
+        {
+            // An empty table is noise. Commands print a message for the empty case.
+            return;
+        }
+
         options ??= new TableOptions();
 
         if (options.Title is not null)

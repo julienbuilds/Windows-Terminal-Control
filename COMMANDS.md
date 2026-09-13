@@ -7,6 +7,26 @@ Every command has a long form and short aliases. On/off settings toggle when giv
 Add `--json` to any command for machine readable output.
 Exit codes: 0 done, 1 the command could not do what was asked, 2 unexpected error (run again with `--debug`).
 
+## Apps
+
+| Command | Aliases | Description |
+|---|---|---|
+| `w focus <window>` | `f` | Bring an app's window to the front |
+| `w close <window>` | `x` | Close an app, like clicking its X |
+| `w kill <app>` |  | Force an app to quit |
+
+## Windows
+
+| Command | Aliases | Description |
+|---|---|---|
+| `w ls` | `windows` | List open windows with their numbers |
+| `w move <window> left \| right \| <monitor> \| <x> <y> <width> <height>` | `m`, `snap` | Snap a window to a side, move it to a monitor, or place it exactly |
+| `w center <window>` |  | Center a window on its monitor |
+| `w max <window> [off]` | `maximize` | Maximize a window |
+| `w min <window> [off]` | `minimize` | Minimize a window |
+| `w top <window> [on \| off]` |  | Keep a window always on top |
+| `w monitors` |  | List monitors with their numbers |
+
 ## Audio
 
 | Command | Aliases | Description |
