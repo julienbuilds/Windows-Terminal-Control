@@ -65,7 +65,7 @@ Exit codes: 0 done, 1 the command could not do what was asked, 2 unexpected erro
 
 | Command | Aliases | Description |
 |---|---|---|
-| `w scene <name> \| list \| show <name> \| delete <name> \| file` | `s`, `scenes` | Run a scene: a saved list of commands |
+| `w scene <name> \| list \| show <name> \| new <name> [empty] \| edit <name> \| delete <name> \| file` | `s`, `scenes` | Run, create or edit a scene: a saved list of commands |
 
 ## Help
 

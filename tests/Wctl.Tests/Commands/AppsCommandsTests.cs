@@ -165,7 +165,7 @@ public class AppsCommandsTests
 
         using var doc = JsonDocument.Parse(result.RawStdout);
         var names = doc.RootElement.GetProperty("apps").EnumerateArray().Select(a => a.GetProperty("name").GetString()).ToList();
-        Assert.Equal(["Firefox", "Notepad", "Spotify", "Steam", "Visual Studio 2022", "Visual Studio Code"], names);
+        Assert.Equal(["Firefox", "Notepad", "Spotify", "Steam", "Terminal", "Visual Studio 2022", "Visual Studio Code"], names);
     }
 
     [Fact]

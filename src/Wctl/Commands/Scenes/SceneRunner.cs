@@ -43,7 +43,8 @@ internal static class SceneRunner
         return ExitCodes.Ok;
     }
 
-    private static (bool Ok, string Result) RunStep(string step, Invocation inv, DateTimeOffset? windowDeadline)
+    /// <summary>Runs one step with its output captured. Never throws for a failing step; the failure is the result.</summary>
+    public static (bool Ok, string Result) RunStep(string step, Invocation inv, DateTimeOffset? windowDeadline)
     {
         string[] argv;
         try
