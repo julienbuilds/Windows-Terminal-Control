@@ -1,6 +1,7 @@
 using Wctl.Cli;
 using Wctl.Commands.Apps;
 using Wctl.Commands.Audio;
+using Wctl.Commands.Files;
 using Wctl.Commands.Windows;
 
 namespace Wctl.Commands;
@@ -10,9 +11,13 @@ public static class Registry
 {
     public static CommandTable Build() => new(
     [
+        OpenCommand.Spec,
         FocusCommand.Spec,
         CloseCommand.Spec,
         KillCommand.Spec,
+        AppsCommand.Spec,
+        FolderCommand.Spec,
+        RevealCommand.Spec,
         LsCommand.Spec,
         MoveCommand.Spec,
         CenterCommand.Spec,

@@ -17,13 +17,24 @@ public class AppTests
     }
 
     [Fact]
-    public void UnknownCommand_FailsWithMessage()
+    public void UnknownWord_IsTreatedAsSomethingToOpen()
     {
         var result = TestHost.Run("frobnicate");
 
         Assert.Equal(ExitCodes.Failure, result.ExitCode);
-        Assert.Contains("Unknown command 'frobnicate'", result.Stderr);
+        Assert.Contains("Nothing called 'frobnicate' was found", result.Stderr);
         Assert.Equal(string.Empty, result.Stdout);
+    }
+
+    [Fact]
+    public void UnknownCommand_WithoutOpenCommand_FailsWithMessage()
+    {
+        var table = new CommandTable([Wctl.Commands.VersionCommand.Spec]);
+
+        var result = TestHost.Run(table, new Fakes().Services, "frobnicate");
+
+        Assert.Equal(ExitCodes.Failure, result.ExitCode);
+        Assert.Contains("Unknown command 'frobnicate'", result.Stderr);
     }
 
     [Theory]
@@ -60,12 +71,12 @@ public class AppTests
     }
 
     [Fact]
-    public void UnknownOption_Fails()
+    public void UnknownOption_IsRejectedByTheCommand()
     {
         var result = TestHost.Run("version", "--loud");
 
         Assert.Equal(ExitCodes.Failure, result.ExitCode);
-        Assert.Contains("--loud", result.Stderr);
+        Assert.Contains("Too many arguments for 'version'", result.Stderr);
     }
 
     [Fact]

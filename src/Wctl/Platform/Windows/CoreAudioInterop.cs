@@ -228,7 +228,7 @@ internal static class Com
         }
     }
 
-    private static void Initialize()
+    public static void Initialize()
     {
         if (initialized)
         {
