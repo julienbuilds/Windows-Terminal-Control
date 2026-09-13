@@ -11,9 +11,18 @@ Exit codes: 0 done, 1 the command could not do what was asked, 2 unexpected erro
 
 | Command | Aliases | Description |
 |---|---|---|
+| `w open <app \| file \| folder \| link> [arguments]` | `o` | Open an app, file, folder or link |
 | `w focus <window>` | `f` | Bring an app's window to the front |
 | `w close <window>` | `x` | Close an app, like clicking its X |
 | `w kill <app>` |  | Force an app to quit |
+| `w apps [<filter>]` |  | List installed apps, optionally filtered |
+
+## Files
+
+| Command | Aliases | Description |
+|---|---|---|
+| `w folder [<path>]` |  | Open a folder in Explorer, the current one by default |
+| `w reveal <file>` | `select` | Show a file in Explorer with the file selected |
 
 ## Windows
 

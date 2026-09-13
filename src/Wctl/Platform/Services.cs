@@ -12,10 +12,13 @@ public sealed class Services
 
     public required IWindows Windows { get; init; }
 
+    public required IShell Shell { get; init; }
+
     /// <summary>The real thing. Construction is free; each implementation talks to Windows only when first used.</summary>
     public static Services Real() => new()
     {
         Audio = new CoreAudio(),
         Windows = new Win32Windows(),
+        Shell = new WindowsShell(),
     };
 }

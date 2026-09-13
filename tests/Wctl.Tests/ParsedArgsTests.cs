@@ -27,11 +27,11 @@ public class ParsedArgsTests
     }
 
     [Fact]
-    public void UnknownOption_Throws()
+    public void UnknownOptions_AreValuesForTheCommand()
     {
-        var e = Assert.Throws<WctlException>(() => ParsedArgs.Parse(["vol", "--loud"]));
+        var parsed = ParsedArgs.Parse(["open", "code", "--new-window", "--json"]);
 
-        Assert.Contains("--loud", e.Message);
-        Assert.Equal(ExitCodes.Failure, e.ExitCode);
+        Assert.Equal(new[] { "open", "code", "--new-window" }, parsed.Positionals);
+        Assert.True(parsed.Json);
     }
 }

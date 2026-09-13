@@ -2,7 +2,8 @@ namespace Wctl.Cli;
 
 /// <summary>
 /// The command line split into positional words and the few global flags.
-/// Only words starting with "--" (plus -h and -V) are flags. "-5" and "+5" are values, because "w vol -5" must work.
+/// Only the known global flags are taken out. "-5", "+5" and unknown "--flags" stay values, because "w vol -5"
+/// and "w open code --new-window" must work.
 /// </summary>
 public sealed record ParsedArgs(
     IReadOnlyList<string> Positionals,
@@ -37,11 +38,8 @@ public sealed record ParsedArgs(
                     markdown = true;
                     break;
                 default:
-                    if (arg.StartsWith("--", StringComparison.Ordinal))
-                    {
-                        throw new WctlException($"Unknown option '{arg}'. Known options: --json, --help, --version, --debug.");
-                    }
-
+                    // Anything else is a value for the command, including other --flags, so 'w open code --new-window' works.
+                    // Commands check their own arguments and reject what they do not understand.
                     positionals.Add(arg);
                     break;
             }
