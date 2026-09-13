@@ -48,7 +48,7 @@ Rules that apply everywhere:
 ## Good to know
 
 - `w close` by app name closes all windows of that app. By title or number it closes one window. `w kill` never asks.
-- `w hdr` acts on every display that supports HDR.
+- `w hdr` acts on every display that supports HDR. `w hdr monitor main` only touches the primary monitor, `w hdr monitor 2` the one with that number in `w monitors`.
 - `w brightness` talks to the monitor over DDC/CI. Some monitors need that switched on in their menu, and some drop a request now and then. The command retries and tells you when a monitor did not follow. `w brightness 50 monitor 2` sets one monitor.
 - `w awake` blocks the terminal and shows a countdown. Ctrl+C ends it early.
 

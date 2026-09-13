@@ -1,4 +1,3 @@
-using System.Globalization;
 using Wctl.Cli;
 using Wctl.Platform;
 
@@ -15,27 +14,35 @@ public static class BrightnessCommand
         Usage = "brightness [<n> | +<n> | -<n>] [monitor <m>]",
         Details = "Talks to the monitor over DDC/CI, the same channel its own menu uses. Not every monitor supports it, "
             + "and some need DDC/CI switched on in their menu. Some monitors drop a request now and then; run the command again. "
-            + "Without 'monitor <m>' it acts on every monitor that answers. Laptop panels are not covered yet.",
+            + "Acts on every monitor that answers unless 'monitor <m>' picks one: a number from 'w monitors', or 'main' for "
+            + "the primary monitor. Laptop panels are not covered yet.",
         MaxArgs = 3,
         Run = Run,
     };
 
     private static int Run(Invocation inv)
     {
-        var (valueArg, monitorNumber) = ParseArgs(inv.Args);
-        var display = inv.Services.Display;
         var known = inv.Services.Windows.Monitors();
-        var selected = Select(display.GetBrightness(), known, monitorNumber);
+        var words = inv.Args.ToList();
+        var monitor = MonitorNames.Take(words, known, Spec.Usage);
+        if (words.Count > 1)
+        {
+            throw new WctlException($"Too many arguments. Usage: w {Spec.Usage}");
+        }
+
+        var valueArg = words.Count == 1 && words[0] != "status" ? words[0] : null;
+        var display = inv.Services.Display;
+        var selected = Select(display.GetBrightness(), monitor);
 
         var errors = new List<string>();
         if (valueArg is not null)
         {
             Level.Apply(valueArg, 0, "Brightness"); // Validates the text once, before any monitor is touched.
-            foreach (var monitor in selected)
+            foreach (var m in selected)
             {
                 try
                 {
-                    display.SetBrightness(monitor.Device, Level.Apply(valueArg, monitor.Percent, "Brightness"));
+                    display.SetBrightness(m.Device, Level.Apply(valueArg, m.Percent, "Brightness"));
                 }
                 catch (WctlException e)
                 {
@@ -43,8 +50,8 @@ public static class BrightnessCommand
                 }
             }
 
-            var wanted = selected.Select(m => m.Device).ToHashSet();
-            selected = display.GetBrightness().Where(m => wanted.Contains(m.Device)).ToList();
+            var devices = selected.Select(m => m.Device).ToHashSet();
+            selected = display.GetBrightness().Where(m => devices.Contains(m.Device)).ToList();
         }
 
         Report(selected, known, inv.Output);
@@ -56,42 +63,14 @@ public static class BrightnessCommand
         return ExitCodes.Ok;
     }
 
-    private static (string? Value, int? Monitor) ParseArgs(IReadOnlyList<string> args)
+    private static List<BrightnessMonitor> Select(IReadOnlyList<BrightnessMonitor> all, MonitorInfo? monitor)
     {
-        var words = args.ToList();
-        int? monitor = null;
-
-        var at = words.FindIndex(w => w is "monitor" or "mon");
-        if (at >= 0)
+        if (monitor is not null)
         {
-            if (at + 1 >= words.Count || !int.TryParse(words[at + 1], NumberStyles.None, CultureInfo.InvariantCulture, out var number))
-            {
-                throw new WctlException($"Which monitor? Usage: w {Spec.Usage}");
-            }
-
-            monitor = number;
-            words.RemoveRange(at, 2);
-        }
-
-        if (words.Count > 1)
-        {
-            throw new WctlException($"Too many arguments. Usage: w {Spec.Usage}");
-        }
-
-        var value = words.Count == 1 && words[0] != "status" ? words[0] : null;
-        return (value, monitor);
-    }
-
-    private static List<BrightnessMonitor> Select(IReadOnlyList<BrightnessMonitor> all, IReadOnlyList<MonitorInfo> known, int? monitorNumber)
-    {
-        if (monitorNumber is int number)
-        {
-            var device = known.FirstOrDefault(m => m.Index == number)?.Device
-                ?? throw new WctlException($"There is no monitor {number}. Run 'w monitors' to see them.");
-            var match = all.FirstOrDefault(m => m.Device == device);
+            var match = all.FirstOrDefault(m => m.Device == monitor.Device);
             if (match is null || !match.Supported)
             {
-                throw new WctlException($"Monitor {number} does not answer brightness requests over DDC/CI. Check that DDC/CI is enabled in its menu.");
+                throw new WctlException($"Monitor {monitor.Index} does not answer brightness requests over DDC/CI. Check that DDC/CI is enabled in its menu.");
             }
 
             return [match];

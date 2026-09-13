@@ -253,6 +253,76 @@ public class DisplayCommandsTests
         Assert.Contains("Monitor 2 does not answer", result.Stderr);
     }
 
+    [Theory]
+    [InlineData("hdr", "monitor", "1")]
+    [InlineData("hdr", "monitor", "main")]
+    [InlineData("h", "mon", "primary")]
+    [InlineData("hdr", "on", "monitor", "1")]
+    [InlineData("hdr", "monitor", "1", "on")]
+    public void Hdr_WithMonitor_TouchesOnlyThatMonitor(params string[] argv)
+    {
+        var fakes = new Fakes();
+        fakes.Display.Hdr[1] = new HdrDisplay(FakeDisplay.Display2, Supported: true, Enabled: false);
+
+        var result = TestHost.Run(fakes, argv);
+
+        Assert.Equal(ExitCodes.Ok, result.ExitCode);
+        Assert.Equal((FakeDisplay.Display1, true), Assert.Single(fakes.Display.HdrChanges));
+        Assert.Equal("HDR: on\n", result.Stdout);
+        Assert.False(fakes.Display.Hdr[1].Enabled);
+    }
+
+    [Fact]
+    public void Hdr_WithMonitor_TogglesThatMonitorRegardlessOfTheOthers()
+    {
+        var fakes = new Fakes();
+        fakes.Display.Hdr[0] = fakes.Display.Hdr[0] with { Enabled = true };
+        fakes.Display.Hdr[1] = new HdrDisplay(FakeDisplay.Display2, Supported: true, Enabled: false);
+
+        var result = TestHost.Run(fakes, "hdr", "monitor", "1");
+
+        Assert.Equal((FakeDisplay.Display1, false), Assert.Single(fakes.Display.HdrChanges));
+        Assert.Equal("HDR: off\n", result.Stdout);
+    }
+
+    [Fact]
+    public void Hdr_WithMonitorThatHasNoHdr_Fails()
+    {
+        var fakes = new Fakes();
+
+        var result = TestHost.Run(fakes, "hdr", "monitor", "2");
+
+        Assert.Equal(ExitCodes.Failure, result.ExitCode);
+        Assert.Contains("Monitor 2 does not support HDR", result.Stderr);
+        Assert.Empty(fakes.Display.HdrChanges);
+    }
+
+    [Theory]
+    [InlineData("hdr", "monitor", "3")]
+    [InlineData("hdr", "monitor")]
+    [InlineData("hdr", "monitor", "x")]
+    [InlineData("hdr", "on", "off", "monitor", "1")]
+    public void Hdr_WithBadMonitorOption_Fails(params string[] argv)
+    {
+        var fakes = new Fakes();
+
+        var result = TestHost.Run(fakes, argv);
+
+        Assert.Equal(ExitCodes.Failure, result.ExitCode);
+        Assert.Empty(fakes.Display.HdrChanges);
+    }
+
+    [Fact]
+    public void Brightness_WithMonitorMain_UsesThePrimaryMonitor()
+    {
+        var fakes = new Fakes();
+
+        var result = TestHost.Run(fakes, "brightness", "+5", "monitor", "main");
+
+        Assert.Equal((FakeDisplay.Display1, 65), Assert.Single(fakes.Display.BrightnessChanges));
+        Assert.Equal("Brightness: 65%\n", result.Stdout);
+    }
+
     [Fact]
     public void Brightness_WhenOneMonitorFails_StillSetsTheOthersAndReportsBoth()
     {
