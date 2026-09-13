@@ -2,7 +2,7 @@ namespace Wctl.Cli;
 
 /// <summary>
 /// Everything there is to know about one command. This is the single source of truth:
-/// the router uses it to dispatch, "w help" and COMMANDS.md are rendered from it.
+/// the router uses it to dispatch, "w help", COMMANDS.md and tab completion are all rendered from it.
 /// </summary>
 public sealed record CommandSpec
 {
@@ -27,8 +27,14 @@ public sealed record CommandSpec
     /// <summary>How many words the command accepts after its name. More than that is an error, so typos never pass silently.</summary>
     public int MaxArgs { get; init; } = int.MaxValue;
 
+    /// <summary>What tab completion offers after this command. Candidates are filtered by what the user typed.</summary>
+    internal Completer? Complete { get; init; }
+
     public required Func<Invocation, int> Run { get; init; }
 }
+
+/// <summary>Returns everything that could follow; the caller narrows it down to what the user has typed.</summary>
+internal delegate IEnumerable<string> Completer(CompletionContext context);
 
 /// <summary>Help sections, in display order.</summary>
 public static class Groups

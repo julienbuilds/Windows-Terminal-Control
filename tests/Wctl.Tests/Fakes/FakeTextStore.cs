@@ -2,9 +2,9 @@ using Wctl.Platform;
 
 namespace Wctl.Tests;
 
-internal sealed class FakeSceneStore : ISceneStore
+internal sealed class FakeTextStore(string filePath) : ITextStore
 {
-    public string FilePath { get; } = @"C:\Users\Julien\AppData\Roaming\wctl\scenes.txt";
+    public string FilePath { get; } = filePath;
 
     /// <summary>Null means no file yet.</summary>
     public string? Text { get; set; }

@@ -12,6 +12,7 @@ public static class CenterCommand
         Usage = "center <window>",
         Details = "Keeps the size. A maximized or minimized window is restored first.",
         MaxArgs = 1,
+        Complete = ctx => ctx.Position == 0 ? ctx.WindowTargets() : [],
         Run = Run,
     };
 

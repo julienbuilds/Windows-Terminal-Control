@@ -16,7 +16,16 @@ public static class MoveCommand
         Details = "'w move firefox left' fills the left half of its monitor. 'w move firefox 2' moves it to monitor 2 "
             + "(see 'w monitors'). Four numbers place the visible frame at x,y with that size, in screen pixels.",
         MaxArgs = 5,
+        Complete = Complete,
         Run = Run,
+    };
+
+    private static IEnumerable<string> Complete(CompletionContext ctx) => ctx.Position switch
+    {
+        0 => ctx.WindowTargets(),
+        1 => ctx.WithMonitorOption("left", "right"),
+        2 when ctx.Word(1) is "monitor" or "mon" => ctx.WithMonitorOption(),
+        _ => [],
     };
 
     private static int Run(Invocation inv)

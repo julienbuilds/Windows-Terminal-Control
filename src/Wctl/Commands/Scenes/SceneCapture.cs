@@ -6,8 +6,9 @@ namespace Wctl.Commands.Scenes;
 /// <summary>Turns the current state of the PC into scene steps: sound, displays, then open apps and where their windows are.</summary>
 internal static class SceneCapture
 {
-    public static List<string> Capture(Services services)
+    public static List<string> Capture(Wctl.Cli.Invocation inv)
     {
+        var services = inv.Services;
         var steps = new List<string>();
 
         var audio = services.Audio;
@@ -49,7 +50,7 @@ internal static class SceneCapture
 
         if (apps.Count > 0)
         {
-            var installed = services.Shell.InstalledApps();
+            var installed = inv.AppCatalog.Apps;
             steps.AddRange(apps.Select(w => $"open {Quote(AppNames.ForOpen(w, installed))}"));
             steps.Add("wait 2s");
             foreach (var window in apps)

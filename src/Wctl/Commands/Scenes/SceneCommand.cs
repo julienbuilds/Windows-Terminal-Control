@@ -19,7 +19,19 @@ public static class SceneCommand
             + "open apps and their windows) into steps you can review, trim and save; add 'empty' to start blank. "
             + "Scenes live in one text file, one command per line under a [name] header; 'w scene file' opens it.",
         MaxArgs = 3,
+        Complete = Complete,
         Run = Run,
+    };
+
+    private static readonly string[] Subcommands = ["list", "show", "new", "edit", "delete", "file"];
+
+    private static IEnumerable<string> Complete(CompletionContext ctx) => ctx.Position switch
+    {
+        0 => Subcommands.Concat(ctx.SceneNames()),
+        1 when ctx.Word(0) is "show" or "edit" or "delete" => ctx.SceneNames(),
+        1 when ctx.Word(0) is "new" => [],
+        2 when ctx.Word(0) is "new" => ["empty"],
+        _ => [],
     };
 
     private static int Run(Invocation inv)
@@ -56,7 +68,7 @@ public static class SceneCommand
         }
     }
 
-    public static List<Scene> Load(ISceneStore store) => SceneFile.Parse(store.Read() ?? string.Empty);
+    public static List<Scene> Load(ITextStore store) => SceneFile.Parse(store.Read() ?? string.Empty);
 
     public static Scene Find(List<Scene> scenes, string name)
         => scenes.Find(s => s.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
@@ -84,14 +96,14 @@ public static class SceneCommand
             throw new WctlException($"Expected 'empty' or nothing after the name. Got '{inv.Args[2]}'. Usage: w {Spec.Usage}");
         }
 
-        var app = inv.Services.Shell.InstalledApps().FirstOrDefault(a =>
+        var app = inv.AppCatalog.Apps.FirstOrDefault(a =>
             a.Name.Equals(name, StringComparison.OrdinalIgnoreCase) || a.Executable.Equals(name, StringComparison.OrdinalIgnoreCase));
         if (app is not null)
         {
             inv.Output.Message($"Note: '{name}' is also the app {app.Name}. 'w {name}' will run the scene; 'w open {name}' still opens the app.");
         }
 
-        var steps = empty ? [] : SceneCapture.Capture(inv.Services);
+        var steps = empty ? [] : SceneCapture.Capture(inv);
         return new SceneEditor(inv).Run(name, steps);
     }
 
@@ -120,7 +132,7 @@ public static class SceneCommand
         return ExitCodes.Ok;
     }
 
-    private static int Delete(ISceneStore store, string name, IOutput output)
+    private static int Delete(ITextStore store, string name, IOutput output)
     {
         var scenes = Load(store);
         var scene = Find(scenes, name);
@@ -130,7 +142,7 @@ public static class SceneCommand
         return ExitCodes.Ok;
     }
 
-    private static int OpenFile(ISceneStore store, IShell shell, IOutput output)
+    private static int OpenFile(ITextStore store, IShell shell, IOutput output)
     {
         if (store.Read() is null)
         {

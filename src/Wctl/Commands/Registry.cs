@@ -41,5 +41,7 @@ public static class Registry
         SceneCommand.Spec,
         HelpCommand.Spec,
         VersionCommand.Spec,
+        CompletionCommand.Spec,
+        CompleteCommand.Spec,
     ]);
 }

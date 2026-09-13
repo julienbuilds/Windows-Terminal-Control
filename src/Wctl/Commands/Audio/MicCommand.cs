@@ -13,6 +13,7 @@ public static class MicCommand
         Details = "Without an argument it toggles. 'w mic status' only shows the state. "
             + "Acts on the default microphone from Windows Settings > Sound > Input.",
         MaxArgs = 1,
+        Complete = _ => ["mute", "unmute", "status"],
         Run = Run,
     };
 

@@ -20,3 +20,10 @@ if ($entries -notcontains $target) {
 }
 
 Write-Host "Installed: $(& (Join-Path $target 'w.exe') version)"
+
+$profileHasCompletion = (Test-Path $PROFILE) -and ((Get-Content $PROFILE -Raw) -match "CommandName w")
+if (-not $profileHasCompletion) {
+    Write-Host ""
+    Write-Host "Tab completion is not set up yet. To add it:"
+    Write-Host "  w completion powershell >> `$PROFILE"
+}

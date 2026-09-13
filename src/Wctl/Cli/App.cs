@@ -1,4 +1,5 @@
 using Spectre.Console;
+using Wctl.Commands;
 using Wctl.Platform;
 
 namespace Wctl.Cli;
@@ -8,6 +9,21 @@ public static class App
 {
     public static int Run(string[] argv, CommandTable table, Services services, IAnsiConsole console, IAnsiConsole errorConsole, TextWriter stdout)
     {
+        // Completion is handled before the global flags are parsed, because the words being completed may themselves
+        // look like flags: "w apps --json <tab>" must still complete, not print JSON.
+        if (argv.Length > 0 && argv[0].Equals(CompleteCommand.Spec.Name, StringComparison.OrdinalIgnoreCase))
+        {
+            try
+            {
+                return Completion.Run(argv[1..], table, services, stdout);
+            }
+            catch (WctlException e)
+            {
+                new ConsoleOutput(console, errorConsole).Fail(e.Message);
+                return e.ExitCode;
+            }
+        }
+
         ParsedArgs parsed;
         try
         {

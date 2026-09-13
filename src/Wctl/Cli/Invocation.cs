@@ -19,4 +19,9 @@ public sealed record Invocation(
 {
     /// <summary>The first argument in lower case, or null when there is none.</summary>
     public string? FirstArg => Args.Count == 0 ? null : Args[0].ToLowerInvariant();
+
+    /// <summary>Installed apps, cached. One instance per command run.</summary>
+    internal Commands.Apps.AppCatalog AppCatalog => catalog ??= new(Services.Shell, Services.AppCache, Services.Clock);
+
+    private Commands.Apps.AppCatalog? catalog;
 }

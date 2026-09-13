@@ -43,7 +43,13 @@ internal sealed class FakeShell : IShell
 
     public List<string> Revealed { get; } = [];
 
-    public IReadOnlyList<AppEntry> InstalledApps() => Apps;
+    public int InstalledAppsCalls { get; private set; }
+
+    public IReadOnlyList<AppEntry> InstalledApps()
+    {
+        InstalledAppsCalls++;
+        return Apps;
+    }
 
     public void Open(string target, string? arguments = null) => Opened.Add((target, arguments));
 

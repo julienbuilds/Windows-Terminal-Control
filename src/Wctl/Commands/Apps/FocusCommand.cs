@@ -14,6 +14,7 @@ public static class FocusCommand
         Usage = "focus <window>",
         Details = "A minimized window is restored. With several windows of one app, the most recent one comes to the front.",
         MaxArgs = 1,
+        Complete = ctx => ctx.Position == 0 ? ctx.WindowTargets() : [],
         Run = Run,
     };
 

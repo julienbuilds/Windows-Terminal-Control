@@ -25,7 +25,9 @@ internal sealed class Fakes
 
     public FakeClock Clock { get; } = new();
 
-    public FakeSceneStore Scenes { get; } = new();
+    public FakeTextStore Scenes { get; } = new(@"C:\Users\Julien\AppData\Roaming\wctl\scenes.txt");
+
+    public FakeTextStore AppCache { get; } = new(@"C:\Users\Julien\AppData\Local\wctl\apps.txt");
 
     public FakePrompt Prompt { get; } = new();
 
@@ -38,6 +40,7 @@ internal sealed class Fakes
         Power = Power,
         Clock = Clock,
         Scenes = Scenes,
+        AppCache = AppCache,
         Prompt = Prompt,
     };
 }
