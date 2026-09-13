@@ -3,6 +3,7 @@ using Wctl.Commands.Apps;
 using Wctl.Commands.Audio;
 using Wctl.Commands.Display;
 using Wctl.Commands.Files;
+using Wctl.Commands.Power;
 using Wctl.Commands.Windows;
 
 namespace Wctl.Commands;
@@ -32,6 +33,9 @@ public static class Registry
         AudioCommand.Spec,
         HdrCommand.Spec,
         BrightnessCommand.Spec,
+        LockCommand.Spec,
+        SleepCommand.Spec,
+        AwakeCommand.Spec,
         HelpCommand.Spec,
         VersionCommand.Spec,
     ]);

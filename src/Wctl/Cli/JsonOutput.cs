@@ -25,6 +25,11 @@ public sealed class JsonOutput(TextWriter stdout) : IOutput
         // Text for people has no place in machine readable output.
     }
 
+    public void Status(string text)
+    {
+        // Same as Message: progress text is for people watching a terminal.
+    }
+
     public void Table(string key, string[] columns, IReadOnlyList<string[]> rows, TableOptions? options = null)
         => tables.Add((ToKey(key), columns, rows, options?.CurrentRow ?? -1));
 

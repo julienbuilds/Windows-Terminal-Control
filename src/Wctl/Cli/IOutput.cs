@@ -21,6 +21,12 @@ public interface IOutput
     /// <summary>A plain line of text for people. Not included in JSON output.</summary>
     void Message(string text);
 
+    /// <summary>
+    /// A line that is replaced by the next status, for countdowns and progress. An empty text clears it.
+    /// Not included in JSON output.
+    /// </summary>
+    void Status(string text);
+
     /// <summary>A list. Terminal: a table. JSON: an array of objects under <paramref name="key"/>, with column names as property names.</summary>
     void Table(string key, string[] columns, IReadOnlyList<string[]> rows, TableOptions? options = null);
 

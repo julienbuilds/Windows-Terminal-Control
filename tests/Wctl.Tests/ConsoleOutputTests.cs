@@ -29,6 +29,23 @@ public class ConsoleOutputTests
     }
 
     [Fact]
+    public void Status_RewritesOneLineAndClears()
+    {
+        var (output, stdout, _) = Create();
+
+        output.Status("10s left");
+        output.Status("9s left");
+        output.Status(string.Empty);
+        output.State("Kept awake", "10s");
+
+        var text = stdout.Output;
+        Assert.Contains("\r10s left", text);
+        Assert.Contains("\r9s left ", text);
+        Assert.DoesNotContain("\n10s", text);
+        Assert.EndsWith("Kept awake: 10s\n", TestHost.Normalize(text));
+    }
+
+    [Fact]
     public void Action_PrintsTargetAndResult()
     {
         var (output, stdout, _) = Create();

@@ -21,7 +21,19 @@ internal sealed class Fakes
 
     public FakeDisplay Display { get; } = new();
 
-    public Services Services => new() { Audio = Audio, Windows = Windows, Shell = Shell, Display = Display };
+    public FakePower Power { get; } = new();
+
+    public FakeClock Clock { get; } = new();
+
+    public Services Services => new()
+    {
+        Audio = Audio,
+        Windows = Windows,
+        Shell = Shell,
+        Display = Display,
+        Power = Power,
+        Clock = Clock,
+    };
 }
 
 /// <summary>Runs the whole tool in process, the same way Program.cs does, but against fakes and in-memory consoles.</summary>
