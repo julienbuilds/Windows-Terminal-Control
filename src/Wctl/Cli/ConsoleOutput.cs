@@ -22,6 +22,17 @@ public sealed class ConsoleOutput(IAnsiConsole stdout, IAnsiConsole stderr) : IO
 
     public void Message(string text) => stdout.MarkupLine(Markup.Escape(text));
 
+    public void Status(string text)
+    {
+        // Carriage return without line feed rewrites the same terminal line. Padding wipes what the last status left behind.
+        var padding = Math.Max(0, statusLength - text.Length);
+        stdout.Profile.Out.Writer.Write('\r' + text + new string(' ', padding) + (text.Length == 0 ? "\r" : string.Empty));
+        stdout.Profile.Out.Writer.Flush();
+        statusLength = text.Length;
+    }
+
+    private int statusLength;
+
     public void Table(string key, string[] columns, IReadOnlyList<string[]> rows, TableOptions? options = null)
     {
         if (rows.Count == 0)

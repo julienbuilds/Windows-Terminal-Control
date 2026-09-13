@@ -16,6 +16,10 @@ public sealed class Services
 
     public required IDisplay Display { get; init; }
 
+    public required IPower Power { get; init; }
+
+    public required IClock Clock { get; init; }
+
     /// <summary>The real thing. Construction is free; each implementation talks to Windows only when first used.</summary>
     public static Services Real() => new()
     {
@@ -23,5 +27,7 @@ public sealed class Services
         Windows = new Win32Windows(),
         Shell = new WindowsShell(),
         Display = new WindowsDisplay(),
+        Power = new WindowsPower(),
+        Clock = new SystemClock(),
     };
 }

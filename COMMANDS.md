@@ -52,6 +52,14 @@ Exit codes: 0 done, 1 the command could not do what was asked, 2 unexpected erro
 | `w hdr [on \| off \| status]` | `h` | Turn HDR on or off |
 | `w brightness [<n> \| +<n> \| -<n>] [monitor <m>]` | `bright` | Show or set monitor brightness |
 
+## System
+
+| Command | Aliases | Description |
+|---|---|---|
+| `w lock` |  | Lock the screen |
+| `w sleep` |  | Put the PC to sleep |
+| `w awake [<duration>]` |  | Keep the PC and screen awake for a while |
+
 ## Help
 
 | Command | Aliases | Description |
