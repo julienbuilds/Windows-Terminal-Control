@@ -33,6 +33,22 @@ public class JsonOutputTests
     }
 
     [Fact]
+    public void Steps_BecomeAnArrayWithOkFlags()
+    {
+        using var writer = new StringWriter();
+        var output = new JsonOutput(writer);
+
+        output.State("Scene", "work");
+        output.StepResult("vol 15", true, "Volume: 15%");
+        output.StepResult("close blender", false, "No window matches 'blender'.");
+        output.Flush();
+
+        Assert.Equal(
+            "{\"scene\":\"work\",\"steps\":[{\"step\":\"vol 15\",\"ok\":true,\"result\":\"Volume: 15%\"},{\"step\":\"close blender\",\"ok\":false,\"result\":\"No window matches \\u0027blender\\u0027.\"}]}",
+            writer.ToString().Trim());
+    }
+
+    [Fact]
     public void Actions_HaveTargetAndResult()
     {
         using var writer = new StringWriter();

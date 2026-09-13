@@ -30,6 +30,9 @@ public interface IOutput
     /// <summary>A list. Terminal: a table. JSON: an array of objects under <paramref name="key"/>, with column names as property names.</summary>
     void Table(string key, string[] columns, IReadOnlyList<string[]> rows, TableOptions? options = null);
 
+    /// <summary>One step of a scene. Terminal: a check or a cross, the step, its result. JSON: an entry in a "steps" array.</summary>
+    void StepResult(string command, bool ok, string result);
+
     /// <summary>An error message. Terminal: red text on stderr. JSON: an "error" property.</summary>
     void Fail(string text);
 

@@ -39,5 +39,6 @@ public static class Groups
     public const string Audio = "Audio";
     public const string Display = "Display";
     public const string System = "System";
+    public const string Scenes = "Scenes";
     public const string Help = "Help";
 }

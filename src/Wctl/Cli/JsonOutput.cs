@@ -33,6 +33,10 @@ public sealed class JsonOutput(TextWriter stdout) : IOutput
     public void Table(string key, string[] columns, IReadOnlyList<string[]> rows, TableOptions? options = null)
         => tables.Add((ToKey(key), columns, rows, options?.CurrentRow ?? -1));
 
+    public void StepResult(string command, bool ok, string result) => steps.Add((command, ok, result));
+
+    private readonly List<(string Step, bool Ok, string Result)> steps = [];
+
     public void Fail(string text) => error = text;
 
     public void Flush()
@@ -64,6 +68,21 @@ public sealed class JsonOutput(TextWriter stdout) : IOutput
                         json.WriteBoolean("current", i == currentRow);
                     }
 
+                    json.WriteEndObject();
+                }
+
+                json.WriteEndArray();
+            }
+
+            if (steps.Count > 0)
+            {
+                json.WriteStartArray("steps");
+                foreach (var (step, ok, result) in steps)
+                {
+                    json.WriteStartObject();
+                    json.WriteString("step", step);
+                    json.WriteBoolean("ok", ok);
+                    json.WriteString("result", result);
                     json.WriteEndObject();
                 }
 

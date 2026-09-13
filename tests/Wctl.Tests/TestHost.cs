@@ -25,6 +25,8 @@ internal sealed class Fakes
 
     public FakeClock Clock { get; } = new();
 
+    public FakeSceneStore Scenes { get; } = new();
+
     public Services Services => new()
     {
         Audio = Audio,
@@ -33,6 +35,7 @@ internal sealed class Fakes
         Display = Display,
         Power = Power,
         Clock = Clock,
+        Scenes = Scenes,
     };
 }
 

@@ -52,7 +52,21 @@ internal sealed class FakeWindows : IWindows
 
     public bool FocusSucceeds { get; set; } = true;
 
-    public IReadOnlyList<WindowInfo> List() => WindowList;
+    public int ListCalls { get; private set; }
+
+    /// <summary>Windows that show up on the given call of <see cref="List"/>, like an app that is still starting.</summary>
+    public List<(int AtCall, WindowInfo Window)> Appearing { get; } = [];
+
+    public IReadOnlyList<WindowInfo> List()
+    {
+        ListCalls++;
+        foreach (var (_, window) in Appearing.Where(a => a.AtCall <= ListCalls && !WindowList.Contains(a.Window)).ToList())
+        {
+            WindowList.Add(window);
+        }
+
+        return WindowList;
+    }
 
     public IReadOnlyList<MonitorInfo> Monitors() => MonitorList;
 

@@ -59,6 +59,13 @@ Exit codes: 0 done, 1 the command could not do what was asked, 2 unexpected erro
 | `w lock` |  | Lock the screen |
 | `w sleep` |  | Put the PC to sleep |
 | `w awake [<duration>]` |  | Keep the PC and screen awake for a while |
+| `w wait <duration>` |  | Wait for a while |
+
+## Scenes
+
+| Command | Aliases | Description |
+|---|---|---|
+| `w scene <name> \| list \| show <name> \| delete <name> \| file` | `s`, `scenes` | Run a scene: a saved list of commands |
 
 ## Help
 

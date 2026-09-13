@@ -84,6 +84,13 @@ public sealed class ConsoleOutput(IAnsiConsole stdout, IAnsiConsole stderr) : IO
         stdout.Write(table);
     }
 
+    public void StepResult(string command, bool ok, string result)
+    {
+        var mark = ok ? "[green]✓[/]" : "[red]✗[/]";
+        var color = ok ? "grey" : "red";
+        stdout.MarkupLine($"  {mark} {Markup.Escape(command.PadRight(30))} [{color}]{Markup.Escape(result)}[/]");
+    }
+
     public void Fail(string text) => stderr.MarkupLine($"[red]error:[/] {Markup.Escape(text)}");
 
     public void Flush()
