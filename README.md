@@ -61,7 +61,9 @@ dotnet test
 dotnet publish src/Wctl/Wctl.csproj -c Release -r win-x64 -o publish
 ```
 
-The result is `publish/w.exe`. After adding or changing a command, run `scripts/update-commands.ps1` to regenerate COMMANDS.md. A test checks that the file matches the code.
+The result is `publish/w.exe`. To use your own build from any terminal, run `scripts/install-local.ps1`: it publishes, copies `w.exe` to `%LOCALAPPDATA%\Programs\wctl` and puts that folder on your user PATH.
+
+After adding or changing a command, run `scripts/update-commands.ps1` to regenerate COMMANDS.md. A test checks that the file matches the code.
 
 ## Coming next
 
