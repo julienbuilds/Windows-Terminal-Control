@@ -5,13 +5,16 @@ namespace Wctl.Cli;
 /// <summary>Renders the command table for people (terminal) and for the repo (COMMANDS.md).</summary>
 public static class Help
 {
+    public const string ProductName = "Windows Terminal Control";
+
     public const string Tagline = "Fast commands for controlling Windows.";
 
     private const string UsageLine = "Usage: w <command> [arguments]    w <app> opens the app";
 
     public static int Overview(CommandTable table, IOutput output)
     {
-        output.State("wctl", VersionInfo.Current);
+        output.Message($"{ProductName} {VersionInfo.Current}");
+        output.Detail("version", VersionInfo.Current);
         output.Message(Tagline);
         output.Message(string.Empty);
         output.Message(UsageLine);
@@ -51,7 +54,7 @@ public static class Help
     public static string Markdown(CommandTable table)
     {
         var sb = new StringBuilder();
-        sb.Append("# Commands\n\n");
+        sb.Append("# ").Append(ProductName).Append(" commands\n\n");
         sb.Append("Generated from the command table in the code. Do not edit by hand. Regenerate with `scripts/update-commands.ps1`.\n\n");
         sb.Append("Usage: `w <command> [arguments]`. `w <app>` opens the app.\n");
         sb.Append("Every command has a long form and short aliases. On/off settings toggle when given no argument.\n");

@@ -8,12 +8,12 @@ public static class VersionCommand
     {
         Name = "version",
         Group = Groups.Help,
-        Summary = "Show the wctl version",
+        Summary = "Show the version",
         Usage = "version",
         MaxArgs = 0,
         Run = inv =>
         {
-            inv.Output.State("wctl", VersionInfo.Current);
+            inv.Output.State("w", VersionInfo.Current);
             return ExitCodes.Ok;
         },
     };

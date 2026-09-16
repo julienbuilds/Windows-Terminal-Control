@@ -1,4 +1,4 @@
-# Commands
+# Windows Terminal Control commands
 
 Generated from the command table in the code. Do not edit by hand. Regenerate with `scripts/update-commands.ps1`.
 
@@ -72,6 +72,6 @@ Exit codes: 0 done, 1 the command could not do what was asked, 2 unexpected erro
 | Command | Aliases | Description |
 |---|---|---|
 | `w help [<command>]` |  | Show all commands, or details for one |
-| `w version` |  | Show the wctl version |
+| `w version` |  | Show the version |
 | `w completion powershell` |  | Print the tab completion script for your shell |
 | `w complete <word> ... [--end]` |  | Print completion candidates for a half typed command line |

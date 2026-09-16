@@ -11,7 +11,7 @@ public static class Router
     {
         if (parsed.Version)
         {
-            output.State("wctl", VersionInfo.Current);
+            output.State("w", VersionInfo.Current);
             return ExitCodes.Ok;
         }
 

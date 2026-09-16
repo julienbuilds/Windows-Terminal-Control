@@ -1,0 +1,59 @@
+name: Bug report
+description: Something does not work the way it should
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for taking the time. The more exact the command, the faster this gets fixed.
+
+  - type: input
+    id: command
+    attributes:
+      label: The command you ran
+      placeholder: w move firefox left
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+      placeholder: Firefox fills the left half of monitor 1.
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened instead
+      description: Paste the output. If it failed, run it again with `--debug` and paste that.
+      render: text
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: The output of `w version`.
+      placeholder: w: 0.1.0
+    validations:
+      required: true
+
+  - type: input
+    id: windows
+    attributes:
+      label: Windows version
+      description: Press Win+R, type `winver`, and copy the version and build.
+      placeholder: Windows 11 Pro 24H2, build 26100
+    validations:
+      required: true
+
+  - type: textarea
+    id: hardware
+    attributes:
+      label: Anything about your setup that might matter
+      description: For a display or sound problem, the output of `w monitors` or `w audio` helps a lot.
+      render: text
+    validations:
+      required: false

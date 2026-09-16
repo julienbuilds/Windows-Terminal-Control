@@ -9,6 +9,7 @@ permissions:
 
 jobs:
   release:
+    name: build and publish
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -25,10 +26,13 @@ jobs:
         run: |
           $version = "${{ github.ref_name }}".TrimStart("v")
           dotnet publish src/Wctl/Wctl.csproj -c Release -r win-x64 -o publish -p:Version=$version
-          Compress-Archive -Path publish/w.exe -DestinationPath "wctl-${{ github.ref_name }}-win-x64.zip"
+          Compress-Archive -Path publish/w.exe -DestinationPath "w-${{ github.ref_name }}-win-x64.zip"
+          (Get-FileHash "w-${{ github.ref_name }}-win-x64.zip" -Algorithm SHA256).Hash | Out-File "w-${{ github.ref_name }}-win-x64.zip.sha256"
 
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
         with:
-          files: wctl-*-win-x64.zip
+          files: |
+            w-*-win-x64.zip
+            w-*-win-x64.zip.sha256
           generate_release_notes: true

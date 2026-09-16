@@ -5,8 +5,10 @@
     <AssemblyName>w</AssemblyName>
     <RootNamespace>Wctl</RootNamespace>
     <Version>0.1.0</Version>
-    <Product>wctl</Product>
-    <Description>Fast commands for controlling Windows.</Description>
+    <Product>Windows Terminal Control</Product>
+    <Authors>Julien Schweter</Authors>
+    <Description>Fast commands for controlling Windows. Apps, windows, audio, displays and power from one short command.</Description>
+    <RepositoryUrl>https://github.com/julienbuilds/Windows-Terminal-Control</RepositoryUrl>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <!-- Required by source generated COM interop (Platform/Windows). -->
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

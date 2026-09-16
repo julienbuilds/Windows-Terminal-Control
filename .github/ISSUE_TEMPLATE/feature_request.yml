@@ -1,0 +1,34 @@
+name: Idea
+description: Suggest a command or a change
+labels: [idea]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The bar for a new command is that an ordinary Windows user would reach for it, not only someone
+        who knows PowerShell. Handy for developers and admins is a fine idea, it just tends to wait longer.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do
+      description: Describe the moment where Windows is slow or annoying today.
+      placeholder: Switching my headphones on and off means four clicks in the sound flyout.
+    validations:
+      required: true
+
+  - type: input
+    id: command
+    attributes:
+      label: What you would like to type
+      placeholder: w audio headphones
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else
+      description: How you do it today, a tool that already does it well, or a Windows API you know of.
+    validations:
+      required: false

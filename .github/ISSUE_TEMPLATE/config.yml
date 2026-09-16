@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question or idea to talk through
+    url: https://github.com/julienbuilds/Windows-Terminal-Control/discussions
+    about: Ask anything here. No template, no pressure.
+  - name: Security problem
+    url: https://github.com/julienbuilds/Windows-Terminal-Control/security/advisories/new
+    about: Please report these privately instead of opening an issue.

@@ -46,7 +46,7 @@ public class AppTests
         var result = TestHost.Run(arg);
 
         Assert.Equal(ExitCodes.Ok, result.ExitCode);
-        Assert.Contains($"wctl: {VersionInfo.Current}", result.Stdout);
+        Assert.Contains($"w: {VersionInfo.Current}", result.Stdout);
     }
 
     [Theory]
@@ -114,7 +114,7 @@ public class AppTests
         Assert.Equal(ExitCodes.Ok, result.ExitCode);
         Assert.Equal(string.Empty, result.Stdout);
         using var doc = JsonDocument.Parse(result.RawStdout);
-        Assert.Equal(VersionInfo.Current, doc.RootElement.GetProperty("wctl").GetString());
+        Assert.Equal(VersionInfo.Current, doc.RootElement.GetProperty("w").GetString());
     }
 
     [Fact]
@@ -133,7 +133,7 @@ public class AppTests
         var result = TestHost.Run("help", "--markdown");
 
         Assert.Equal(ExitCodes.Ok, result.ExitCode);
-        Assert.StartsWith("# Commands", result.RawStdout, StringComparison.Ordinal);
+        Assert.StartsWith($"# {Help.ProductName} commands", result.RawStdout, StringComparison.Ordinal);
         Assert.Contains("| `w version` |", result.RawStdout);
     }
 
