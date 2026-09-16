@@ -19,6 +19,8 @@ internal sealed class Fakes
 
     public FakeShell Shell { get; } = new();
 
+    public FakeMedia Media { get; } = new();
+
     public FakeDisplay Display { get; } = new();
 
     public FakePower Power { get; } = new();
@@ -36,6 +38,7 @@ internal sealed class Fakes
         Audio = Audio,
         Windows = Windows,
         Shell = Shell,
+        Media = Media,
         Display = Display,
         Power = Power,
         Clock = Clock,

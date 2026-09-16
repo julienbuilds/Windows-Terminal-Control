@@ -43,6 +43,7 @@ public static class Groups
     public const string Files = "Files";
     public const string Windows = "Windows";
     public const string Audio = "Audio";
+    public const string Media = "Media";
     public const string Display = "Display";
     public const string System = "System";
     public const string Scenes = "Scenes";
