@@ -73,5 +73,5 @@ Exit codes: 0 done, 1 the command could not do what was asked, 2 unexpected erro
 |---|---|---|
 | `w help [<command>]` |  | Show all commands, or details for one |
 | `w version` |  | Show the version |
-| `w completion powershell` |  | Print the tab completion script for your shell |
+| `w completion install <file> \| powershell` |  | Set up tab completion, or print the script for it |
 | `w complete <word> ... [--end]` |  | Print completion candidates for a half typed command line |

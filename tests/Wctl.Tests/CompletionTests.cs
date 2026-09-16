@@ -163,7 +163,7 @@ public class CompletionTests
     [InlineData("mute", new[] { "on", "off", "status" })]
     [InlineData("mic", new[] { "mute", "unmute", "status" })]
     [InlineData("apps", new[] { "--refresh" })]
-    [InlineData("completion", new[] { "powershell" })]
+    [InlineData("completion", new[] { "install", "powershell" })]
     public void SimpleCommands_OfferTheirWords(string command, string[] expected)
     {
         Assert.Equal(expected, Complete(command, End));
@@ -313,11 +313,18 @@ public class CompletionTests
     [Theory]
     [InlineData("completion")]
     [InlineData("completion", "bash")]
-    public void Completion_NeedsASupportedShell(params string[] argv)
+    [InlineData("completion", "install")]
+    public void Completion_NeedsToBeToldWhatToDo(params string[] argv)
     {
         var result = TestHost.Run(argv);
 
         Assert.Equal(ExitCodes.Failure, result.ExitCode);
         Assert.Equal(string.Empty, result.RawStdout);
+    }
+
+    [Fact]
+    public void Completion_OffersInstallAndPowershell()
+    {
+        Assert.Equal(["install", "powershell"], Complete("completion", End));
     }
 }

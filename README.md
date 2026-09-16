@@ -75,11 +75,15 @@ If you would rather build it, see [Build from source](#build-from-source). The s
 
 ### Tab completion
 
-One line, once:
+One command, once:
 
 ```powershell
-w completion powershell >> $PROFILE
+w completion install $PROFILE
 ```
+
+That adds a marked block to your PowerShell profile. It is safe to run again, because it replaces its own block
+rather than adding a second one, and it keeps whatever encoding your profile already uses. If you would rather
+place the script yourself, `w completion powershell` just prints it.
 
 Open a new terminal, and Tab completes commands, your scenes, installed apps, open windows, audio devices and monitors.
 
@@ -109,7 +113,7 @@ Headphones (BTD 600)            audio output
 32M2V (NVIDIA High Definition)  audio output
 ```
 
-The script it writes ends with a commented line that binds Tab to that same menu, if you would rather have it there.
+The block it writes ends with a commented line that binds Tab to that same menu, if you would rather have it there.
 
 ## What it can do
 

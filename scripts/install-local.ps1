@@ -25,5 +25,5 @@ $profileHasCompletion = (Test-Path $PROFILE) -and ((Get-Content $PROFILE -Raw) -
 if (-not $profileHasCompletion) {
     Write-Host ""
     Write-Host "Tab completion is not set up yet. To add it:"
-    Write-Host "  w completion powershell >> `$PROFILE"
+    Write-Host "  w completion install `$PROFILE"
 }
