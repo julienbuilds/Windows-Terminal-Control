@@ -45,6 +45,13 @@ internal static unsafe partial class User32
     public const uint MonitorInfoPrimary = 1;
     public const byte VkMenu = 0x12;
     public const uint KeyEventFKeyUp = 0x0002;
+    public const uint KeyEventFExtendedKey = 0x0001;
+
+    // The media buttons found on most keyboards. Windows routes them to whichever app currently owns media.
+    public const byte VkMediaNextTrack = 0xB0;
+    public const byte VkMediaPrevTrack = 0xB1;
+    public const byte VkMediaStop = 0xB2;
+    public const byte VkMediaPlayPause = 0xB3;
 
     [LibraryImport("user32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]

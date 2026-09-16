@@ -45,6 +45,15 @@ Exit codes: 0 done, 1 the command could not do what was asked, 2 unexpected erro
 | `w mic [mute \| unmute]` |  | Mute or unmute the microphone |
 | `w audio [<device>]` | `a` | List audio outputs, or switch to one |
 
+## Media
+
+| Command | Aliases | Description |
+|---|---|---|
+| `w play` | `pause`, `pp` | Pause what is playing, or resume it |
+| `w next` | `skip` | Skip to the next track |
+| `w prev` | `previous`, `back` | Go back to the previous track |
+| `w stop` |  | Stop playback |
+
 ## Display
 
 | Command | Aliases | Description |

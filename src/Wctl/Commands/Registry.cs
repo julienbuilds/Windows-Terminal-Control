@@ -3,6 +3,7 @@ using Wctl.Commands.Apps;
 using Wctl.Commands.Audio;
 using Wctl.Commands.Display;
 using Wctl.Commands.Files;
+using Wctl.Commands.Media;
 using Wctl.Commands.Power;
 using Wctl.Commands.Scenes;
 using Wctl.Commands.Windows;
@@ -32,6 +33,10 @@ public static class Registry
         MuteCommand.Spec,
         MicCommand.Spec,
         AudioCommand.Spec,
+        PlayCommand.Spec,
+        NextCommand.Spec,
+        PrevCommand.Spec,
+        StopCommand.Spec,
         HdrCommand.Spec,
         BrightnessCommand.Spec,
         LockCommand.Spec,

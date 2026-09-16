@@ -14,6 +14,8 @@ public sealed class Services
 
     public required IShell Shell { get; init; }
 
+    public required IMedia Media { get; init; }
+
     public required IDisplay Display { get; init; }
 
     public required IPower Power { get; init; }
@@ -32,6 +34,7 @@ public sealed class Services
         Audio = new CoreAudio(),
         Windows = new Win32Windows(),
         Shell = new WindowsShell(),
+        Media = new WindowsMedia(),
         Display = new WindowsDisplay(),
         Power = new WindowsPower(),
         Clock = new SystemClock(),
