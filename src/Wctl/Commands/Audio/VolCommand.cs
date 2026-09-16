@@ -13,7 +13,7 @@ public static class VolCommand
         Usage = "vol [<n> | +<n> | -<n> | mute | unmute]",
         Details = "Setting a volume also unmutes, like the volume keys do. 'w vol mute' mutes, 'w mute' toggles.",
         MaxArgs = 1,
-        Complete = _ => ["mute", "unmute", "status"],
+        Complete = _ => [new("mute", "silence the speakers"), new("unmute", "sound back on"), new("status", "only show the volume")],
         Run = Run,
     };
 

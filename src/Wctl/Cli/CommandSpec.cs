@@ -34,7 +34,7 @@ public sealed record CommandSpec
 }
 
 /// <summary>Returns everything that could follow; the caller narrows it down to what the user has typed.</summary>
-internal delegate IEnumerable<string> Completer(CompletionContext context);
+internal delegate IEnumerable<Candidate> Completer(CompletionContext context);
 
 /// <summary>Help sections, in display order.</summary>
 public static class Groups

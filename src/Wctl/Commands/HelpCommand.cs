@@ -12,7 +12,7 @@ public static class HelpCommand
         Usage = "help [<command>]",
         Details = "'w help --markdown' prints the command list as Markdown. scripts/update-commands.ps1 uses it to generate COMMANDS.md.",
         MaxArgs = 1,
-        Complete = ctx => ctx.Position == 0 ? ctx.Table.All.Select(c => c.Name) : [],
+        Complete = ctx => ctx.Position == 0 ? ctx.Table.All.Select(c => new Candidate(c.Name, c.Summary)) : [],
         Run = Run,
     };
 

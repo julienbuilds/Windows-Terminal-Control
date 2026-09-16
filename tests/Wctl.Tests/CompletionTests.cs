@@ -2,14 +2,21 @@ namespace Wctl.Tests;
 
 public class CompletionTests
 {
+    /// <summary>Just the suggestions, without the descriptions.</summary>
     private static string[] Complete(Fakes fakes, params string[] words)
+        => Lines(fakes, words).Select(line => line.Split('\t')[0]).ToArray();
+
+    private static string[] Complete(params string[] words) => Complete(new Fakes(), words);
+
+    /// <summary>The raw output: "suggestion\tdescription" per line.</summary>
+    private static string[] Lines(Fakes fakes, params string[] words)
     {
         var result = TestHost.Run(fakes, ["complete", .. words]);
         Assert.Equal(ExitCodes.Ok, result.ExitCode);
         return TestHost.Normalize(result.RawStdout).Split('\n', StringSplitOptions.RemoveEmptyEntries);
     }
 
-    private static string[] Complete(params string[] words) => Complete(new Fakes(), words);
+    private static string[] Lines(params string[] words) => Lines(new Fakes(), words);
 
     /// <summary>What the PowerShell script sends when a fresh word is being typed.</summary>
     private const string End = Wctl.Cli.Completion.EndMarker;
@@ -219,6 +226,78 @@ public class CompletionTests
         var candidates = Complete("hdr", "--json", End);
 
         Assert.Equal(["on", "off", "status", "monitor"], candidates);
+    }
+
+    [Fact]
+    public void EverySuggestionCarriesADescription()
+    {
+        var fakes = new Fakes();
+        fakes.Scenes.Text = "[work]\nvol 15\n";
+
+        string[][] lines =
+        [
+            Lines(fakes, End),
+            Lines(fakes, "hdr", End),
+            Lines(fakes, "close", End),
+            Lines(fakes, "audio", End),
+            Lines(fakes, "open", "sp"),
+            Lines(fakes, "scene", End),
+            Lines(fakes, "move", "firefox", "monitor", End),
+        ];
+
+        Assert.All(lines.SelectMany(l => l), line =>
+        {
+            var parts = line.Split('\t');
+            Assert.Equal(2, parts.Length);
+            Assert.NotEmpty(parts[1]);
+        });
+    }
+
+    [Fact]
+    public void Descriptions_SayWhatEachSuggestionIs()
+    {
+        var fakes = new Fakes();
+        fakes.Scenes.Text = "[work]\nvol 15\nhdr off\n";
+
+        Assert.Contains("hdr\tTurn HDR on or off", Lines(fakes, "h"));
+        Assert.Contains("h\tshort for hdr", Lines(fakes, "h"));
+        Assert.Contains("work\tscene, 2 steps", Lines(fakes, "w"));
+        Assert.Contains("Spotify\tapp", Lines(fakes, "sp"));
+        Assert.Contains("Visual Studio Code\tapp, Code.exe", Lines(fakes, "vis"));
+        Assert.Contains("on\tturn HDR on", Lines(fakes, "hdr", End));
+        Assert.Contains("main\tthe primary monitor", Lines(fakes, "hdr", "monitor", End));
+        Assert.Contains("1\t3072x1728, primary", Lines(fakes, "hdr", "monitor", End));
+        Assert.Contains("2\t2560x1440", Lines(fakes, "hdr", "monitor", End));
+    }
+
+    [Fact]
+    public void WindowDescriptions_ShowTitlesAndCounts()
+    {
+        var lines = Lines("close", End);
+
+        Assert.Contains("firefox\t2 windows", lines);
+        Assert.Contains("Discord\tDiscord", lines);
+        Assert.Contains("1\tfirefox: ChatGPT - Mozilla Firefox", lines);
+        Assert.Contains("2\tDiscord: Discord", lines);
+    }
+
+    [Fact]
+    public void AudioDescriptions_MarkTheCurrentOutput()
+    {
+        var lines = Lines("audio", End);
+
+        Assert.Contains("Speakers (FiiO K11)\tcurrent output", lines);
+        Assert.Contains("Headphones (BTD 600)\taudio output", lines);
+    }
+
+    [Fact]
+    public void CompletionScript_PassesDescriptionsToTheShell()
+    {
+        var result = TestHost.Run("completion", "powershell");
+
+        Assert.Contains("-split \"`t\", 2", result.RawStdout);
+        Assert.Contains("'ParameterValue', $tip", result.RawStdout);
+        Assert.Contains("MenuComplete", result.RawStdout);
     }
 
     [Fact]

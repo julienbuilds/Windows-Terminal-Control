@@ -37,8 +37,12 @@ public static class MinCommand
 
 internal static class ShowCommand
 {
-    public static IEnumerable<string> Complete(CompletionContext ctx)
-        => ctx.Position == 0 ? ctx.WindowTargets() : ctx.Position == 1 ? ["off"] : [];
+    public static IEnumerable<Candidate> Complete(CompletionContext ctx) => ctx.Position switch
+    {
+        0 => ctx.WindowTargets(),
+        1 => [new("off", "back to the normal size")],
+        _ => [],
+    };
 
     public static int Run(Invocation inv, string usage, WindowState state, string word)
     {

@@ -15,7 +15,7 @@ public static class AppsCommand
         Details = "Shows the names 'w open' understands. The exe column is the short name for desktop apps: 'w open code'. "
             + "The list is kept for a day so opening an app stays instant; '--refresh' rebuilds it now. "
             + "An app that was just installed is also found on the next lookup, which refreshes by itself.",
-        Complete = _ => [RefreshWord],
+        Complete = _ => [new(RefreshWord, "rebuild the list now")],
         Run = Run,
     };
 

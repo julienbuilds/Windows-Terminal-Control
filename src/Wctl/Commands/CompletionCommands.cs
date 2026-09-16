@@ -30,7 +30,7 @@ public static class CompletionCommand
             + "  w completion powershell >> $PROFILE\n"
             + "Then open a new terminal. Tab completes commands, scenes, apps, open windows, audio devices and monitors.",
         MaxArgs = 1,
-        Complete = _ => [Shell],
+        Complete = _ => [new(Shell, "the script for PowerShell")],
         Run = Run,
     };
 
@@ -52,7 +52,7 @@ public static class CompletionCommand
     /// </summary>
     internal const string Script = """
 
-        # wctl tab completion
+        # Windows Terminal Control tab completion
         Register-ArgumentCompleter -Native -CommandName w -ScriptBlock {
             param($wordToComplete, $commandAst, $cursorPosition)
 
@@ -64,11 +64,18 @@ public static class CompletionCommand
             if ([string]::IsNullOrEmpty($wordToComplete)) { $words += '--end' }
 
             & w complete @words | ForEach-Object {
-                $text = $_
+                # Each line is the suggestion, a tab, then the description shown beside it in the menu.
+                $parts = $_ -split "`t", 2
+                $text = $parts[0]
+                $tip = if ($parts.Count -gt 1 -and $parts[1]) { $parts[1] } else { $text }
                 $insert = if ($text -match '\s') { '"' + $text + '"' } else { $text }
-                [System.Management.Automation.CompletionResult]::new($insert, $text, 'ParameterValue', $text)
+                [System.Management.Automation.CompletionResult]::new($insert, $text, 'ParameterValue', $tip)
             }
         }
+
+        # Those descriptions appear in the completion menu, which is Ctrl+Space by default.
+        # Uncomment the next line to get that menu from Tab as well, instead of cycling one by one.
+        # Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete
 
         """;
 }

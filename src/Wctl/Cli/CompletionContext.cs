@@ -23,24 +23,40 @@ internal sealed class CompletionContext
     /// <summary>The word at that position, or an empty string when there is none.</summary>
     public string Word(int index) => index >= 0 && index < Words.Count ? Words[index] : string.Empty;
 
-    public IEnumerable<string> AppNames() => Catalog.Apps.Select(a => a.Name).Order(StringComparer.OrdinalIgnoreCase);
+    public IEnumerable<Candidate> AppNames() => Catalog.Apps
+        .OrderBy(a => a.Name, StringComparer.OrdinalIgnoreCase)
+        .Select(a => new Candidate(a.Name, a.Executable.Length > 0 ? $"app, {a.Executable}.exe" : "app"));
 
     /// <summary>App names of open windows, then the numbers 'w ls' shows.</summary>
-    public IEnumerable<string> WindowTargets()
+    public IEnumerable<Candidate> WindowTargets()
     {
         var windows = Services.Windows.List();
-        return windows.Select(w => w.App)
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .Concat(Enumerable.Range(1, windows.Count).Select(Number));
+
+        var byApp = windows
+            .GroupBy(w => w.App, StringComparer.OrdinalIgnoreCase)
+            .Select(g => new Candidate(g.Key, g.Count() == 1 ? Shorten(g.First().Title) : $"{g.Count()} windows"));
+
+        var byNumber = windows.Select((w, i) => new Candidate(
+            (i + 1).ToString(CultureInfo.InvariantCulture),
+            $"{w.App}: {Shorten(w.Title)}"));
+
+        return byApp.Concat(byNumber);
     }
 
-    public IEnumerable<string> AudioDevices() => Services.Audio.GetOutputDevices().Select(d => d.Name);
+    public IEnumerable<Candidate> AudioDevices()
+    {
+        var current = Services.Audio.GetDefaultOutputId();
+        return Services.Audio.GetOutputDevices()
+            .Select(d => new Candidate(d.Name, d.Id == current ? "current output" : "audio output"));
+    }
 
-    public IEnumerable<string> SceneNames()
+    public IEnumerable<Candidate> SceneNames()
     {
         try
         {
-            return SceneFile.Parse(Services.Scenes.Read() ?? string.Empty).Select(s => s.Name);
+            return SceneFile.Parse(Services.Scenes.Read() ?? string.Empty)
+                .Select(s => new Candidate(s.Name, $"scene, {s.Steps.Count} steps"))
+                .ToList();
         }
         catch (WctlException)
         {
@@ -50,10 +66,20 @@ internal sealed class CompletionContext
     }
 
     /// <summary>Handles the shared "monitor &lt;m&gt;" option: the monitors after the word, the word itself before it.</summary>
-    public IEnumerable<string> WithMonitorOption(params string[] own)
+    public IEnumerable<Candidate> WithMonitorOption(params Candidate[] own)
         => Word(Position - 1) is "monitor" or "mon"
-            ? Services.Windows.Monitors().Select(m => Number(m.Index)).Prepend("main")
-            : own.Append("monitor");
+            ? Monitors()
+            : own.Append(new Candidate("monitor", "pick one monitor"));
 
-    private static string Number(int value) => value.ToString(CultureInfo.InvariantCulture);
+    public IEnumerable<Candidate> Monitors()
+    {
+        var monitors = Services.Windows.Monitors();
+        return monitors
+            .Select(m => new Candidate(
+                m.Index.ToString(CultureInfo.InvariantCulture),
+                $"{m.Bounds.Width}x{m.Bounds.Height}{(m.Primary ? ", primary" : string.Empty)}"))
+            .Prepend(new Candidate("main", "the primary monitor"));
+    }
+
+    private static string Shorten(string title) => title.Length <= 40 ? title : title[..39] + "…";
 }

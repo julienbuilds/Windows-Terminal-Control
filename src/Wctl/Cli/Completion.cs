@@ -23,16 +23,17 @@ internal static class Completion
         var before = words.Take(words.Count - (words.Count == 0 ? 0 : 1)).ToList();
 
         foreach (var candidate in Candidates(before, partial, table, services)
-            .Where(c => c.StartsWith(partial, StringComparison.OrdinalIgnoreCase))
-            .Distinct(StringComparer.OrdinalIgnoreCase))
+            .Where(c => c.Text.StartsWith(partial, StringComparison.OrdinalIgnoreCase))
+            .DistinctBy(c => c.Text, StringComparer.OrdinalIgnoreCase))
         {
-            stdout.WriteLine(candidate);
+            // One line per suggestion: the text, a tab, then the description the shell shows beside it.
+            stdout.WriteLine(candidate.Description is null ? candidate.Text : $"{candidate.Text}\t{candidate.Description}");
         }
 
         return ExitCodes.Ok;
     }
 
-    private static IEnumerable<string> Candidates(List<string> before, string partial, CommandTable table, Services services)
+    private static IEnumerable<Candidate> Candidates(List<string> before, string partial, CommandTable table, Services services)
     {
         var context = new CompletionContext
         {
@@ -49,7 +50,12 @@ internal static class Completion
 
         // The first word: a command, a scene, or an app to open. Apps only once something is typed, because
         // offering every installed app for an empty prompt buries the commands.
-        var names = table.All.SelectMany(c => c.Aliases.Prepend(c.Name)).Concat(context.SceneNames());
+        var names = table.All
+            .SelectMany(c => c.Aliases
+                .Select(a => new Candidate(a, $"short for {c.Name}"))
+                .Prepend(new Candidate(c.Name, c.Summary)))
+            .Concat(context.SceneNames());
+
         return partial.Length == 0 ? names : names.Concat(context.AppNames());
     }
 }

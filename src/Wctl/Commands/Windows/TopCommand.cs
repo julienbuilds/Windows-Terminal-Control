@@ -12,7 +12,12 @@ public static class TopCommand
         Usage = "top <window> [on | off]",
         Details = "Without on or off it toggles.",
         MaxArgs = 2,
-        Complete = ctx => ctx.Position == 0 ? ctx.WindowTargets() : ctx.Position == 1 ? ["on", "off"] : [],
+        Complete = ctx => ctx.Position switch
+        {
+            0 => ctx.WindowTargets(),
+            1 => [new("on", "keep it above everything"), new("off", "let it go behind again")],
+            _ => [],
+        },
         Run = Run,
     };
 

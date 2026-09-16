@@ -23,14 +23,22 @@ public static class SceneCommand
         Run = Run,
     };
 
-    private static readonly string[] Subcommands = ["list", "show", "new", "edit", "delete", "file"];
+    private static readonly Candidate[] Subcommands =
+    [
+        new("list", "all your scenes"),
+        new("show", "the steps of one scene"),
+        new("new", "capture your setup as a new scene"),
+        new("edit", "change an existing scene"),
+        new("delete", "remove a scene"),
+        new("file", "open the scenes file"),
+    ];
 
-    private static IEnumerable<string> Complete(CompletionContext ctx) => ctx.Position switch
+    private static IEnumerable<Candidate> Complete(CompletionContext ctx) => ctx.Position switch
     {
         0 => Subcommands.Concat(ctx.SceneNames()),
         1 when ctx.Word(0) is "show" or "edit" or "delete" => ctx.SceneNames(),
         1 when ctx.Word(0) is "new" => [],
-        2 when ctx.Word(0) is "new" => ["empty"],
+        2 when ctx.Word(0) is "new" => [new("empty", "start with no steps")],
         _ => [],
     };
 

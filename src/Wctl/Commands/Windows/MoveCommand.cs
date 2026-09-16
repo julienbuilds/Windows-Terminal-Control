@@ -20,11 +20,11 @@ public static class MoveCommand
         Run = Run,
     };
 
-    private static IEnumerable<string> Complete(CompletionContext ctx) => ctx.Position switch
+    private static IEnumerable<Candidate> Complete(CompletionContext ctx) => ctx.Position switch
     {
         0 => ctx.WindowTargets(),
-        1 => ctx.WithMonitorOption("left", "right"),
-        2 when ctx.Word(1) is "monitor" or "mon" => ctx.WithMonitorOption(),
+        1 => ctx.WithMonitorOption(new("left", "left half of its monitor"), new("right", "right half of its monitor")),
+        2 when ctx.Word(1) is "monitor" or "mon" => ctx.Monitors(),
         _ => [],
     };
 

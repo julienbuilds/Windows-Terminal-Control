@@ -83,16 +83,33 @@ w completion powershell >> $PROFILE
 
 Open a new terminal, and Tab completes commands, your scenes, installed apps, open windows, audio devices and monitors.
 
+Every suggestion carries a short description. Press `Ctrl+Space` instead of Tab to get the menu that shows them:
+
 ```console
-PS C:\> w hdr <TAB>
-on  off  status  monitor
+PS C:\> w hdr <CTRL+SPACE>
+on        turn HDR on
+off       turn HDR off
+status    only show the state
+monitor   pick one monitor
 
-PS C:\> w audio <TAB>
-Speakers (FiiO K11)   Headphones (BTD 600)   32M2V (NVIDIA High Definition Audio)
+PS C:\> w hdr monitor <CTRL+SPACE>
+main      the primary monitor
+1         3840x2160, primary
+2         2560x1440
 
-PS C:\> w close <TAB>
-firefox  Discord  WindowsTerminal  Spotify
+PS C:\> w close <CTRL+SPACE>
+firefox           Pull requests - Mozilla Firefox
+WindowsTerminal   2 windows
+1                 firefox: Pull requests - Mozilla Firefox
+2                 WindowsTerminal: PowerShell
+
+PS C:\> w audio <CTRL+SPACE>
+Speakers (FiiO K11)             current output
+Headphones (BTD 600)            audio output
+32M2V (NVIDIA High Definition)  audio output
 ```
+
+The script it writes ends with a commented line that binds Tab to that same menu, if you would rather have it there.
 
 ## What it can do
 

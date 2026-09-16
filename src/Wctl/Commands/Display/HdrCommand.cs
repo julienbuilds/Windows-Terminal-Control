@@ -16,7 +16,10 @@ public static class HdrCommand
             + "a number from 'w monitors', or 'main' for the primary monitor. When displays disagree, the toggle turns all of "
             + "them on first. 'w hdr status' only shows the state.",
         MaxArgs = 3,
-        Complete = ctx => ctx.WithMonitorOption("on", "off", "status"),
+        Complete = ctx => ctx.WithMonitorOption(
+            new("on", "turn HDR on"),
+            new("off", "turn HDR off"),
+            new("status", "only show the state")),
         Run = Run,
     };
 
